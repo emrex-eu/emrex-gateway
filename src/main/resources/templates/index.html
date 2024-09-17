@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">Title</title>
+</head>
+<body>
+
+
+<div>
+	<h2>Emrex Emps</h2>
+	<ul>
+		<li th:each="country : ${emps.emregCountryRepresentations}">
+			<h3 th:text="${country.countryName}">Country Name</h3>
+			<img th:src="@{${'/flags/' + country.countryCode + '.svg'}}" height="50" width="50" alt="Flag of ${country.countryName}" />
+
+			<ul>
+				<li th:each="emp : ${country.emps}">
+					<p th:if="${country.singleFetch == false}">
+						<a th:href="${emp.url}" th:text="${emp.name}"></a>
+					</p>
+					<p th:if="${country.singleFetch == true}" >
+						<a th:href="${emp.url}" th:text="${emp.institutions[0]}"></a>
+					</p>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+</body>
+</html>

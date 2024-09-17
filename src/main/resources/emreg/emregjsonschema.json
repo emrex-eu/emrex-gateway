@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Emreg",
+  "definitions": {
+    "Emreg": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "emps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Emp"
+          }
+        },
+        "countries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Country"
+          }
+        }
+      },
+      "required": [
+        "countries",
+        "emps"
+      ],
+      "title": "Emreg"
+    },
+    "Country": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "countryCode": {
+          "type": "string"
+        },
+        "countryName": {
+          "type": "string"
+        },
+        "singleFetch": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "countryCode",
+        "countryName",
+        "singleFetch"
+      ],
+      "title": "Country"
+    },
+    "Emp": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "qt-uri-protocols": [
+            "https"
+          ],
+          "qt-uri-extensions": [
+            ".jsp",
+            ".php"
+          ]
+        },
+        "acronym": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string"
+        },
+        "institutions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pubKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "acronym",
+        "countryCode",
+        "institutions",
+        "pubKey",
+        "url"
+      ],
+      "title": "Emp"
+    }
+  }
+}

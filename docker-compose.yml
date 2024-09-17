@@ -1,0 +1,13 @@
+services:
+  spring-boot:
+    build:
+      context: .
+    environment:
+      _JAVA_OPTIONS: >
+        -Xdebug
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ${MAVEN_SETTINGS_FOLDER}:/root/.m2
