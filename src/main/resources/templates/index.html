@@ -17,10 +17,10 @@
 			<ul>
 				<li th:each="emp : ${country.emps}">
 					<p th:if="${country.singleFetch == false}">
-						<a th:href="${emp.url}" th:text="${emp.name}"></a>
+						<a th:href="@{${'/createSession/'+country.countryCode+'/'+emp.name+'/'+emp.url}}" th:text="${emp.name}"></a>
 					</p>
 					<p th:if="${country.singleFetch == true}" >
-						<a th:href="${emp.url}" th:text="${emp.institutions[0]}"></a>
+						<a th:href="@{${'/createSession/'+country.countryCode+'/'+emp.institutions[0]+'/'+emp.url}}" th:text="${emp.institutions[0]}"></a>
 					</p>
 				</li>
 			</ul>
