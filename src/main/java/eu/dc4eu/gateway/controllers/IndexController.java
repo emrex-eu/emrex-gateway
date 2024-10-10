@@ -23,6 +23,8 @@ public class IndexController {
 	public String index(final Model model) {
 		model.addAttribute("title", "Emrex Gateway");
 		model.addAttribute("emps",emregReader.getEmregRepresentation());
+
+
 		return "index";
 	}
 }

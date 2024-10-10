@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+	<!--
+	Pekar om så att lokala kopior används istället för att alltid tanka ner dem från w3.org
+	-->
+	<uri name="http://www.w3.org/XML/1998/namespace" uri="w3/xml.xsd" />
+</catalog>

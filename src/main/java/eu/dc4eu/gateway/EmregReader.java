@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.dc4eu.gateway.emreg.AcronymRepresentation;
 import eu.dc4eu.gateway.emreg.Country;
-import eu.dc4eu.gateway.emreg.Emp;
 import eu.dc4eu.gateway.emreg.Emreg;
 import eu.dc4eu.gateway.emreg.EmregCountryRepresentation;
 import eu.dc4eu.gateway.emreg.EmregRepresentation;
@@ -42,15 +40,15 @@ public class EmregReader {
 	public EmregRepresentation getEmregRepresentation() {
 		EmregRepresentation emregRepresentation = new EmregRepresentation();
 		emregRepresentation.setEmregCountryRepresentations(new ArrayList<>());
-		for (Emp emp : emreg.getEmps()) {
+		emreg.getEmps().forEach(emp -> {
 			EmregCountryRepresentation emregCountryRepresentation = countryCodeExists(emp.getCountryCode(), emregRepresentation);
 
 			if (emregCountryRepresentation == null) {
 				emregCountryRepresentation = new EmregCountryRepresentation();
 				emregCountryRepresentation.setCountryCode(emp.getCountryCode());
 				Country country = emreg.getCountries().stream()
-									   .filter(c -> c.getCountryCode()
-													 .equals(emp.getCountryCode())).findFirst()
+									   .filter(c -> c.getCountryCode().equals(emp.getCountryCode()))
+									   .findFirst()
 									   .orElse(null);
 
 				emregCountryRepresentation.setCountryName(country.getCountryName());
@@ -72,8 +70,9 @@ public class EmregReader {
 				acronymRepresentation.setInstitutions(emp.getInstitutions());
 				emregCountryRepresentation.getEmps().add(acronymRepresentation);
 			}
+		});
 
-		}
+
 		return emregRepresentation;
 	}
 

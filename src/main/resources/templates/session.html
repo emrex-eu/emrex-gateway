@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Continue to the selected university</title>
+</head>
+<body onload="document.form.submit()">
+
+<div>
+	<h2>Continue to the selected university</h2>
+	<form method="POST" th:action="${url}" name="form">
+		<input type="hidden" name="sessionId" th:value="${sessionId}">
+		<input type="hidden" name="returnUrl" th:value="${returnUrl}">
+		<input type="submit" name="Continue" value="Continue">
+	</form>
+</div>
+</body>
+</html>

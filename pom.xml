@@ -54,6 +54,21 @@
 			<artifactId>jsonschema2pojo-maven-plugin</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
+			<version>1.78.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -85,6 +100,64 @@
 					<sourceDirectory>${project.basedir}/src/main/resources/emreg</sourceDirectory>
 					<targetPackage>eu.dc4eu.gateway.emreg</targetPackage>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>xjc-elmo-api</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<!-- Set the package of the generated code -->
+							<packageName>eu.dc4eu.gateway.elmo.api</packageName>
+							<!-- Define the directory where we should find the DTD files -->
+							<sources>
+								<source>src/main/resources/schema/elmo-schema-1.7.0.xsd</source>
+							</sources>
+							<clearOutputDir>true</clearOutputDir>
+							<noPackageLevelAnnotations>true</noPackageLevelAnnotations>
+							<catalog>src/main/resources/schema/own-catalog.xml</catalog>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xjc-europass-codes</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<packageName>eu.dc4eu.gateway.europass</packageName>
+							<sources>
+								<source>src/main/resources/schema/EUROPASS_ISOCountries_V1.1.xsd</source>
+							</sources>
+							<clearOutputDir>false</clearOutputDir>
+							<noPackageLevelAnnotations>true</noPackageLevelAnnotations>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xjc-xmldsig</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<packageName>eu.dc4eu.gateway.xmldsig</packageName>
+							<sources>
+								<source>src/main/resources/schema/xmldsig-core-schema.xsd</source>
+							</sources>
+							<clearOutputDir>false</clearOutputDir>
+							<noPackageLevelAnnotations>true</noPackageLevelAnnotations>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

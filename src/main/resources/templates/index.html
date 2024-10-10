@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,10 +18,10 @@
 			<ul>
 				<li th:each="emp : ${country.emps}">
 					<p th:if="${country.singleFetch == false}">
-						<a th:href="${emp.url}" th:text="${emp.name}"></a>
+						<a th:href="@{${'/emc/createSession/acronym/'+emp.name}}" th:text="${emp.name}"></a>
 					</p>
 					<p th:if="${country.singleFetch == true}" >
-						<a th:href="${emp.url}" th:text="${emp.institutions[0]}"></a>
+						<a th:href="@{${'/emc/createSession/acronym/'+emp.institutions[0]}}" th:text="${emp.institutions[0]}"></a>
 					</p>
 				</li>
 			</ul>
