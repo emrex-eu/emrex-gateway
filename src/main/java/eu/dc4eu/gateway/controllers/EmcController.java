@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import eu.dc4eu.gateway.EwpResponse;
 import eu.dc4eu.gateway.elmo.ElmoTojava;
 import eu.dc4eu.gateway.elmo.api.Elmo;
+import eu.dc4eu.gateway.emreg.EmregRepresentation;
 import eu.dc4eu.gateway.service.EmregCache;
 import eu.dc4eu.gateway.service.GatewaySession;
 
@@ -26,7 +27,7 @@ public class EmcController {
 	Logger logger = LoggerFactory.getLogger(EmcController.class);
 
 	@PostMapping(value = "/onReturn", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public void onReturn(EwpResponse emrexResponse) {
+	public String onReturn(Model model, EwpResponse emrexResponse) {
 		logger.info("Received response from EMREX: " + emrexResponse);
 
 		ElmoTojava elmoTojava = new ElmoTojava();
@@ -35,6 +36,11 @@ public class EmcController {
 
 		logger.info("parsed  Elmo: " + elmoparsed.getLearner().getGivenNames());
 
+		// TODO: currently returning to "index"
+
+		model.addAttribute("title", "Emrex Gateway");
+		model.addAttribute("emps",new EmregRepresentation());
+		return "index";
 	}
 
 	@GetMapping(value = "/createSession/acronym/{acronym}")
