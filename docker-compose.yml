@@ -11,3 +11,8 @@ services:
       - "5005:5005"
     volumes:
       - ${MAVEN_SETTINGS_FOLDER}:/root/.m2
+
+  converter:
+    image: johanekblad123/dc4eu-converter:latest
+    ports:
+      - "8090:8080"
