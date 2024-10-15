@@ -99,6 +99,16 @@
 			<artifactId>bcprov-jdk18on</artifactId>
 			<version>1.78.1</version>
 		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-jaxrs2-jakarta</artifactId>
+			<version>2.2.25</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations-jakarta</artifactId>
+			<version>2.2.25</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -121,20 +131,60 @@
 				<version>1.1.1</version>
 				<executions>
 					<execution>
+						<id>1</id>
+						<configuration>
+							<annotationStyle>jackson2</annotationStyle>
+							<includeAdditionalProperties>false</includeAdditionalProperties>
+							<sourcePaths>
+								<sourcePath>${project.basedir}/src/main/resources/emreg/emregjsonschema.json</sourcePath>
+							</sourcePaths>
+							<targetPackage>eu.dc4eu.gateway.emreg</targetPackage>
+						</configuration>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<sourceDirectory>${project.basedir}/src/main/resources/emreg</sourceDirectory>
-					<targetPackage>eu.dc4eu.gateway.emreg</targetPackage>
-				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>io.swagger.codegen.v3</groupId>
+				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<version>3.0.57</version>
+				<executions>
+					<execution>
+						<id>pdf-stampling</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/converter/dc4eu-converter.json</inputSpec>
 
+							<artifactId>dc4eu-converter</artifactId>
+							<output>${basedir}/target/generated-sources</output>
+							<language>java</language>
+							<library>jersey3</library>
+
+							<modelPackage>eu.dc4eu.gateway.converter</modelPackage>
+
+
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<generateApis>false</generateApis>
+							<configOptions>
+								<sourceFolder>src/main/java</sourceFolder>
+								<!--interfaceOnly>true</interfaceOnly-->
+								<dateLibrary>java8</dateLibrary>
+								<singleContentTypes>true</singleContentTypes>
+
+								<jakarta>true</jakarta>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<phase>none</phase>
