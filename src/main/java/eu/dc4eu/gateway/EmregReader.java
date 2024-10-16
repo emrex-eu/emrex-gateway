@@ -58,6 +58,7 @@ public class EmregReader {
 				acronymRepresentation.setName(emp.getAcronym());
 				acronymRepresentation.setUrl(emp.getUrl().toString());
 				acronymRepresentation.setInstitutions(emp.getInstitutions());
+				acronymRepresentation.setPubKey(emp.getPubKey());
 
 				List<AcronymRepresentation> acronymRepresentations = new ArrayList<>();
 				acronymRepresentations.add(acronymRepresentation);
@@ -68,6 +69,7 @@ public class EmregReader {
 				acronymRepresentation.setName(emp.getAcronym());
 				acronymRepresentation.setUrl(emp.getUrl().toString());
 				acronymRepresentation.setInstitutions(emp.getInstitutions());
+				acronymRepresentation.setPubKey(emp.getPubKey());
 				emregCountryRepresentation.getEmps().add(acronymRepresentation);
 			}
 		});

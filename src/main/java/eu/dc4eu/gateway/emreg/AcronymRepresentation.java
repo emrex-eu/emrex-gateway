@@ -14,4 +14,5 @@ public class AcronymRepresentation {
 	private String name;
 	private String url;
 	private List<String> institutions = new ArrayList<String>();
+	private String pubKey;
 }

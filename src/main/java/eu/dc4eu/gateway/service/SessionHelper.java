@@ -1,6 +1,9 @@
 package eu.dc4eu.gateway.service;
 
+import eu.dc4eu.gateway.controllers.EmcController;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,7 @@ public class SessionHelper {
     }
 
     public static void addSession(GatewaySession session) {
+        LoggerFactory.getLogger(SessionHelper.class).warn("Adding session: {} and country {}",session.acronym,session.countryCode);
         sessions.add(session);
     }
 }

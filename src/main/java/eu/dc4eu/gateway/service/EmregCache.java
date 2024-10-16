@@ -11,12 +11,23 @@ public class EmregCache {
 
 	public static AcronymRepresentation getAcronymFor(String acronym) {
 
-		return emregRepresentationcahce.getEmregCountryRepresentations().stream()
-									   .flatMap(emregCountryRepresentation -> emregCountryRepresentation.getEmps().stream())
-									   .filter(acronymRepresentation -> acronymRepresentation.getInstitutions()
-																					   .contains(acronym))
-									   .findFirst()
-									   .orElse(null);
+		for (EmregCountryRepresentation emregCountryRepresentation : emregRepresentationcahce.getEmregCountryRepresentations()) {
+			for (AcronymRepresentation acronymRepresentation : emregCountryRepresentation.getEmps()) {
+				if (acronymRepresentation.getInstitutions() == null || acronymRepresentation.getInstitutions()
+						.isEmpty()) {
+					if (acronymRepresentation.getName()
+							.equals(acronym)) {
+						return acronymRepresentation;
+					}
+				}
+				else if (acronymRepresentation.getInstitutions()
+						.get(0)
+						.equals(acronym)) {
+					return acronymRepresentation;
+				}
+			}
+		}
+		return null;
 	}
 
 	private static EmregCountryRepresentation getCountryRepresentationFrom(String acronym) {
@@ -37,7 +48,17 @@ public class EmregCache {
 	}
 
 	public static GatewaySession createSession(String acronym) {
-		GatewaySession session = new GatewaySession(getCountryRepresentationFrom(acronym).getCountryCode(), getAcronymFor(acronym).getName(), getAcronymFor(acronym).getUrl());
+		AcronymRepresentation acronymRepresentation = getAcronymFor(acronym);
+		String acronymName=null;
+		if (acronymRepresentation != null) {
+			if (acronymRepresentation.getInstitutions() == null || acronymRepresentation.getInstitutions()
+					.isEmpty()) {
+				acronymName = acronymRepresentation.getName();
+			} else {
+				acronymName = acronymRepresentation.getInstitutions().get(0);
+			}
+		}
+		GatewaySession session = new GatewaySession(getCountryRepresentationFrom(acronym).getCountryCode(), acronymName, getAcronymFor(acronym).getUrl());
 		SessionHelper.addSession(session);
 		return session;
 	}

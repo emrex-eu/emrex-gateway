@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">Error</title>
+</head>
+<body>
+
+
+<div>
+	<h2>Failed to verify signature, reasons:</h2>
+	<ul>
+		<li><h3>Session id not found</h3></li>
+		<li><h3>Session time expired (15 min)</h3></li>
+		<li><h3>Acronym in session not found in emreg</h3></li>
+		<li><h3>The ELMO is not signed properly</h3></li>
+	</ul>
+</div>
+</body>
+</html>

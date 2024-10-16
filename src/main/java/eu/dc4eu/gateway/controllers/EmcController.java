@@ -1,9 +1,17 @@
 package eu.dc4eu.gateway.controllers;
 
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 
+import eu.dc4eu.gateway.elmo.CertificateHelper;
+import eu.dc4eu.gateway.emreg.AcronymRepresentation;
+import eu.dc4eu.gateway.service.SessionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -42,7 +50,15 @@ public class EmcController {
 		ElmoTojava elmoTojava = new ElmoTojava();
 		String elmo = elmoTojava.frånGz64(emrexResponse.getElmo());
 		Elmo elmoparsed = elmoTojava.transformeraFrånXml(elmo);
-		// TODO: Verifiera signatur
+
+		boolean signatureOK = verifyElmoSignature(emrexResponse, elmo);
+
+		logger.warn("Signature OK: " + signatureOK);
+
+		if (! signatureOK) {
+			logger.error("Signature verification failed");
+			return "error";
+		}
 
 		logger.info("parsed  Elmo: " + elmoparsed.getLearner().getGivenNames());
 
@@ -50,13 +66,39 @@ public class EmcController {
 
 		Response response = converterService.convertElmoToElm(new String(elmo64));
 
-		logger.warn("Converted response"+response);
+		logger.warn("Response: {}", response);
+
+		byte[] data = Base64.getDecoder().decode(response.getContent().getBytes(StandardCharsets.UTF_8));
+
+		logger.warn("ELM: {}", new String(data));
 
 		// TODO: currently returning to "index"
 
 		model.addAttribute("title", "Emrex Gateway");
 		model.addAttribute("emps",new EmregRepresentation());
 		return "index";
+	}
+
+	private boolean verifyElmoSignature(EwpResponse emrexResponse, String elmo) {
+		String sessionId = emrexResponse.getSessionId();
+		if (sessionId == null) {
+			logger.error("No session id in response");
+			return false;
+		}
+		GatewaySession session = SessionHelper.getSession(sessionId);
+		if (session == null) {
+			logger.error("No session found for session id: " + sessionId);
+			return false;
+		}
+		AcronymRepresentation acronymRepresentation = EmregCache.getAcronymFor(session.getAcronym());
+		if (acronymRepresentation == null) {
+			logger.error("No acronym representation found for acronym: " + session.getAcronym());
+			return false;
+		}
+
+		String publicKey = acronymRepresentation.getPubKey();
+
+		return CertificateHelper.verifySignature(publicKey,elmo);
 	}
 
 	@GetMapping(value = "/createSession/acronym/{acronym}")
