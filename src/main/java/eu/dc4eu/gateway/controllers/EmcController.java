@@ -1,12 +1,6 @@
 package eu.dc4eu.gateway.controllers;
 
-
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 
 import eu.dc4eu.gateway.elmo.CertificateHelper;
