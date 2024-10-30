@@ -1,0 +1,257 @@
+---
+services:
+  apigw:
+    container_name: "vc_dev_apigw"
+    image: docker.sunet.se/dc4eu/apigw:latest
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+      - /var/log/sunet:/var/log/sunet
+    depends_on:
+      - mongo
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.2
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  ui:
+    container_name: "vc_dev_ui"
+    image: docker.sunet.se/dc4eu/ui:latest
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+    depends_on:
+      #      apigw:
+      #        condition: service_started
+      #      mockas:
+      #        condition: service_started
+      #      kafka0:
+      #        condition: service_healthy
+      - apigw
+      - mockas
+      #- kafka0
+      #- kafka1
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.50
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  issuer:
+    container_name: "vc_dev_issuer"
+    image: docker.sunet.se/dc4eu/issuer:latest
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+      - /var/log/sunet:/var/log/sunet
+      - ./developer_tools/private_ec256.pem:/private_ec256.pem:ro
+    depends_on:
+      - mongo
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.4
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  verifier:
+    container_name: "vc_dev_verifier"
+    image: docker.sunet.se/dc4eu/verifier:latest
+    restart: always
+    volumes:
+      - ./cert:/cert:ro
+      - ./config.yaml:/config.yaml:ro
+    depends_on:
+      - mongo
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.6
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  registry:
+    container_name: "vc_dev_registry"
+    image: docker.sunet.se/dc4eu/registry:latest
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+    depends_on:
+      - mongo
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.8
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  persistent:
+    container_name: "vc_dev_persistent"
+    image: docker.sunet.se/dc4eu/persistent:latest
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+    depends_on:
+      - mongo
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.12
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  mockas:
+    container_name: "vc_dev_mockas"
+    image: docker.sunet.se/dc4eu/mockas:latest
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+      #depends_on:
+      #- kafka0
+      #- kafka1
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.13
+    environment:
+      - "VC_CONFIG_YAML=config.yaml"
+
+  #mockas2:
+  #  container_name: "vc_dev_mockas2"
+  #  image: docker.sunet.se/dc4eu/mockas:latest
+  #  restart: always
+  #  volumes:
+  #    - ./config.yaml:/config.yaml:ro
+  #  depends_on:
+  #    - kafka0
+  #    - kafka1
+  #  networks:
+  #    vc-dev-net:
+  #      ipv4_address: 172.16.50.23
+  #  environment:
+  #    - "VC_CONFIG_YAML=config.yaml"
+
+  mongo:
+    image: mongo:4.0.10
+    container_name: "vc_dev_mongo"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - mongo_data:/data
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.20
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: vc_dev_jaeger
+    restart: always
+    expose:
+      - 16686
+      - 4317
+      - 4318
+    networks:
+      vc-dev-net:
+        ipv4_address: 172.16.50.22
+    environment:
+      - "COLLECTOR_OTLP_ENABLED=true"
+  #kafka0:
+  #  container_name: "vc_dev_kafka0"
+  #  image: bitnami/kafka:latest
+  #  restart: always
+  #  environment:
+  #    - KAFKA_CFG_PROCESS_ROLES=broker,controller
+  #    - KAFKA_CFG_NODE_ID=0
+  #    - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka0:9093,1@kafka1:9093
+  #    - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+  #    - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka0:9092
+  #    - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+  #    - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+  #    - KAFKA_KRAFT_CLUSTER_ID=550e8400-e29b-42d4-a716-446655440000
+  #    - KAFKA_CLUSTERS_0_NAME=vc_kafka_cluster
+  #    - KAFKA_CFG_NUM_PARTITIONS=2
+  #    - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=2
+  #  ports:
+  #    - '9092:9092'
+  #    - '9093:9093'
+  #  volumes:
+  #    - ./kraft0-data:/bitnami/kafka
+  #  user: "0:0"
+  #  networks:
+  #    vc-dev-net:
+  #      ipv4_address: 172.16.50.60
+  ##    healthcheck:
+  ##      test: [ "CMD-SHELL", "nc -z localhost 9092 || exit 1" ]
+  ##      interval: 10s
+  ##      timeout: 5s
+  ##      retries: 20
+
+  #kafka1:
+  #  container_name: "vc_dev_kafka1"
+  #  image: bitnami/kafka:latest
+  #  restart: always
+  #  environment:
+  #    - KAFKA_CFG_PROCESS_ROLES=broker,controller
+  #    - KAFKA_CFG_NODE_ID=1
+  #    - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka0:9093,1@kafka1:9093
+  #    - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+  #    - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092
+  #    - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+  #    - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+  #    - KAFKA_KRAFT_CLUSTER_ID=550e8400-e29b-42d4-a716-446655440000
+  #    - KAFKA_CLUSTERS_0_NAME=vc_kafka_cluster
+  #    - KAFKA_CFG_NUM_PARTITIONS=2
+  #    - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=2
+  #  ports:
+  #    - '9094:9092'
+  #    - '9095:9093'
+  #  volumes:
+  #    - ./kraft1-data:/bitnami/kafka
+  #  user: "0:0"
+  #  networks:
+  #    vc-dev-net:
+  #      ipv4_address: 172.16.50.61
+  ##    healthcheck:
+  ##      test: [ "CMD-SHELL", "nc -z localhost 9092 || exit 1" ]
+  ##      interval: 10s
+  ##      timeout: 5s
+  ##      retries: 20
+
+  # kafka-ui:
+  #   container_name: "vc_dev_kafka_ui"
+  #   image: provectuslabs/kafka-ui:latest
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     KAFKA_CLUSTERS_0_NAME: vc_kafka_cluster
+  #     KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka0:9092,kafka1:9092
+  #     AUTH_TYPE: "LOGIN_FORM"
+  #     SPRING_SECURITY_USER_NAME: "admin"
+  #     SPRING_SECURITY_USER_PASSWORD: "admin123"
+  #     DYNAMIC_CONFIG_ENABLED: "true"
+  #     KAFKA_UI_MAX_RECORDS_PER_PAGE: 500
+  #     KAFKA_UI_DEFAULT_OFFSET_SEARCH_STRATEGY: "LATEST"
+  #   depends_on:
+  #     - kafka0
+  #     - kafka1
+  #   #      kafka0:
+  #   #        condition: service_healthy
+  #   #      kafka1:
+  #   #        condition: service_healthy
+  #   networks:
+  #     vc-dev-net:
+  #       ipv4_address: 172.16.50.70
+
+networks:
+  vc-dev-net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-vc-dev
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.50.0/24
+volumes:
+  mongo_data:
+  kraft0-data:
+    driver: local
+  kraft1-data:
+    driver: local
