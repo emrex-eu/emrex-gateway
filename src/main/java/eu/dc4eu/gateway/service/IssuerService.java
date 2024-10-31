@@ -82,7 +82,7 @@ public class IssuerService {
 			    "meta": {
 			      "authentic_source": "SUNET",
 			      "collect": {
-			        "id": "7ac7b4a1-cf86-4551-b0f5-de37b1cdf0dc",
+			        "id": "$collect_id$",
 			        "valid_until": 1731228637
 			      },
 			      "credential_valid_from": -1755784082,
@@ -115,8 +115,8 @@ public class IssuerService {
 	@Value("${dc4eu.issuer.url}")
 	private String issuerURL;
 
-	public String upload(String document_id, String person_id) {
-		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id);
+	public String upload(String document_id, String person_id, String collect_id) {
+		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id);
 
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -152,11 +152,13 @@ public class IssuerService {
 	}
 
 
-	public Apiv1UploadRequest convertToRequest(String issuerData, String document_id, String person_id)  {
+	public Apiv1UploadRequest convertToRequest(String issuerData, String document_id, String person_id, String collect_id)  {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Apiv1UploadRequest request = null;
 		try {
-			request = objectMapper.readValue(issuerData.replace("$document_id$", document_id).replace("$person_id$",person_id), Apiv1UploadRequest.class);
+			request = objectMapper.readValue(issuerData.replace("$document_id$", document_id)
+													   .replace("$person_id$",person_id)
+													   .replace("$collect_id$",collect_id), Apiv1UploadRequest.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

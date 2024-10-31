@@ -75,8 +75,9 @@ public class EmcController {
 */
 		String person_id="1212121234";
 		String document_id= UUID.randomUUID().toString();
+		String collect_id= UUID.randomUUID().toString();
 
-		String issuerResponse = issuerService.upload(document_id, person_id);
+		String issuerResponse = issuerService.upload(document_id, person_id, collect_id);
 		logger.warn("Issuer response:"+issuerResponse);
 		// TODO: currently returning to "index"
 		Apiv1NotificationReply notification = issuerService.notification(document_id);
