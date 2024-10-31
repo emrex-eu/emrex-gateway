@@ -78,6 +78,13 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.18.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml</groupId>
+			<artifactId>classmate</artifactId>
+			<version>1.5.1</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jaxb</groupId>
@@ -109,6 +116,11 @@
 			<artifactId>swagger-annotations-jakarta</artifactId>
 			<version>2.2.25</version>
 		</dependency>
+		<!--dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.0</version>
+		</dependency-->
 	</dependencies>
 
 	<build>
@@ -152,7 +164,7 @@
 				<version>3.0.57</version>
 				<executions>
 					<execution>
-						<id>pdf-stampling</id>
+						<id>converter</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -165,6 +177,34 @@
 							<library>jersey3</library>
 
 							<modelPackage>eu.dc4eu.gateway.converter</modelPackage>
+
+
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<generateApis>false</generateApis>
+							<configOptions>
+								<sourceFolder>src/main/java</sourceFolder>
+								<!--interfaceOnly>true</interfaceOnly-->
+								<dateLibrary>java8</dateLibrary>
+								<singleContentTypes>true</singleContentTypes>
+
+								<jakarta>true</jakarta>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>issuer</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/issuer/swagger.json</inputSpec>
+
+							<!--artifactId>dc4eu-converter</artifactId-->
+							<output>${basedir}/target/generated-sources</output>
+							<language>java</language>
+							<library>jersey3</library>
+
+							<modelPackage>eu.dc4eu.gateway.issuer</modelPackage>
 
 
 							<generateSupportingFiles>false</generateSupportingFiles>

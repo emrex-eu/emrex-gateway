@@ -2,9 +2,12 @@ package eu.dc4eu.gateway.controllers;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.UUID;
 
 import eu.dc4eu.gateway.elmo.CertificateHelper;
 import eu.dc4eu.gateway.emreg.AcronymRepresentation;
+import eu.dc4eu.gateway.issuer.Apiv1NotificationReply;
+import eu.dc4eu.gateway.service.IssuerService;
 import eu.dc4eu.gateway.service.SessionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +38,9 @@ public class EmcController {
 	@Inject
 	private ConverterService converterService;
 
+	@Inject
+	private IssuerService issuerService;
+
 	Logger logger = LoggerFactory.getLogger(EmcController.class);
 
 	@PostMapping(value = "/onReturn", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -55,6 +61,7 @@ public class EmcController {
 		}
 
 		logger.info("parsed  Elmo: " + elmoparsed.getLearner().getGivenNames());
+		/*
 
 		byte[] elmo64 = Base64.getEncoder().encode(elmo.getBytes(StandardCharsets.UTF_8));
 
@@ -65,8 +72,16 @@ public class EmcController {
 		byte[] data = Base64.getDecoder().decode(response.getContent().getBytes(StandardCharsets.UTF_8));
 
 		logger.warn("ELM: {}", new String(data));
+*/
+		String person_id="1212121234";
+		String document_id= UUID.randomUUID().toString();
 
+		String issuerResponse = issuerService.upload(document_id, person_id);
+		logger.warn("Issuer response:"+issuerResponse);
 		// TODO: currently returning to "index"
+		Apiv1NotificationReply notification = issuerService.notification(document_id);
+
+		logger.warn("Got deeplink: " + notification.getData().getDeepLink());
 
 		model.addAttribute("title", "Emrex Gateway");
 		model.addAttribute("emps",new EmregRepresentation());

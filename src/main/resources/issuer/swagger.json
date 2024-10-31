@@ -1,0 +1,1342 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Datastore API",
+        "contact": {},
+        "version": "2.8"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/consent": {
+            "post": {
+                "description": "Add consent endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "AddConsent",
+                "operationId": "add-consent",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.AddConsentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/consent/get": {
+            "post": {
+                "description": "Get consent endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "GetConsent",
+                "operationId": "get-consent",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.GetConsentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.Consent"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/credential": {
+            "post": {
+                "description": "Create credential endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "Credential",
+                "operationId": "create-credential",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.CredentialRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1_issuer.MakeSDJWTReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/credential/.well-known/jwks": {
+            "get": {
+                "description": "JWKS endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "JWKS",
+                "operationId": "issuer-JWKS",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1_issuer.JwksReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/document": {
+            "post": {
+                "description": "Get document endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "GetDocument",
+                "operationId": "get-document",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.GetDocumentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.GetDocumentReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete one document endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "DeleteDocument",
+                "operationId": "delete-document",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.DeleteDocumentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/document/collect_id": {
+            "post": {
+                "description": "Get one document with collect id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "GetDocumentByCollectID",
+                "operationId": "get-document-collect-id",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.GetDocumentCollectIDRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.GetDocumentCollectIDReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/document/identity": {
+            "put": {
+                "description": "Adding array of identities to one document",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "AddDocumentIdentity",
+                "operationId": "add-document-identity",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.AddDocumentIdentityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete identity to document endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "DeleteDocumentIdentity",
+                "operationId": "delete-document-identity",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.DeleteDocumentIdentityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/document/list": {
+            "post": {
+                "description": "List documents for an identity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "DocumentList",
+                "operationId": "document-list",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.DocumentListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.DocumentListReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/document/revoke": {
+            "post": {
+                "description": "Revoke one document",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "RevokeDocument",
+                "operationId": "revoke-document",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.RevokeDocumentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/identity/mapping": {
+            "post": {
+                "description": "Identity mapping endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "IdentityMapping",
+                "operationId": "identity-mapping",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.IdentityMappingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.IdentityMappingReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/notification": {
+            "post": {
+                "description": "notification endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "Notification",
+                "operationId": "generic-notification",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.NotificationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.NotificationReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/revoke": {
+            "post": {
+                "description": "Revoke endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "Revoke",
+                "operationId": "generic-revoke",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.RevokeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.RevokeReply"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "description": "Upload endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dc4eu"
+                ],
+                "summary": "Upload",
+                "operationId": "generic-upload",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiv1.UploadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "apiv1.AddConsentRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "authentic_source_person_id"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "authentic_source_person_id": {
+                    "type": "string"
+                },
+                "consent_to": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.AddDocumentIdentityRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "document_id",
+                "document_type",
+                "identities"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "description": "required: true\nexample: SUNET",
+                    "type": "string"
+                },
+                "document_id": {
+                    "description": "required: true\nexample: 7a00fe1a-3e1a-11ef-9272-fb906803d1b8",
+                    "type": "string"
+                },
+                "document_type": {
+                    "description": "required: true\nexample: PDA1",
+                    "type": "string"
+                },
+                "identities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Identity"
+                    }
+                }
+            }
+        },
+        "apiv1.CredentialRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "collect_id",
+                "credential_type",
+                "document_type",
+                "identity"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "collect_id": {
+                    "type": "string"
+                },
+                "credential_type": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                },
+                "identity": {
+                    "$ref": "#/definitions/model.Identity"
+                }
+            }
+        },
+        "apiv1.DeleteDocumentIdentityRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "authentic_source_person_id",
+                "document_id",
+                "document_type"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "description": "required: true\nexample: SUNET",
+                    "type": "string"
+                },
+                "authentic_source_person_id": {
+                    "description": "required: true\nexample: 83c1a3c8-3e1a-11ef-9c01-6b6642c8d638",
+                    "type": "string"
+                },
+                "document_id": {
+                    "description": "required: true\nexample: 7a00fe1a-3e1a-11ef-9272-fb906803d1b8",
+                    "type": "string"
+                },
+                "document_type": {
+                    "description": "required: true\nexample: PDA1",
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.DeleteDocumentRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "document_id",
+                "document_type"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "description": "required: true\nexample: skatteverket",
+                    "type": "string"
+                },
+                "document_id": {
+                    "description": "required: true\nexample: 5e7a981c-c03f-11ee-b116-9b12c59362b9",
+                    "type": "string"
+                },
+                "document_type": {
+                    "description": "required: true\nexample: PDA1",
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.DocumentListReply": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.DocumentList"
+                    }
+                }
+            }
+        },
+        "apiv1.DocumentListRequest": {
+            "type": "object",
+            "required": [
+                "identity"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                },
+                "identity": {
+                    "$ref": "#/definitions/model.Identity"
+                },
+                "valid_from": {
+                    "type": "integer"
+                },
+                "valid_to": {
+                    "type": "integer"
+                }
+            }
+        },
+        "apiv1.GetConsentRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "authentic_source_person_id"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "authentic_source_person_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.GetDocumentCollectIDReply": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Document"
+                }
+            }
+        },
+        "apiv1.GetDocumentCollectIDRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "collect_id",
+                "document_type",
+                "identity"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "collect_id": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                },
+                "identity": {
+                    "$ref": "#/definitions/model.Identity"
+                }
+            }
+        },
+        "apiv1.GetDocumentReply": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Document"
+                }
+            }
+        },
+        "apiv1.GetDocumentRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "document_id",
+                "document_type"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "document_id": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.IdentityMappingReply": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.IDMapping"
+                }
+            }
+        },
+        "apiv1.IdentityMappingRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "identity"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "description": "required: true\nexample: SUNET",
+                    "type": "string"
+                },
+                "identity": {
+                    "$ref": "#/definitions/model.Identity"
+                }
+            }
+        },
+        "apiv1.NotificationReply": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.QR"
+                }
+            }
+        },
+        "apiv1.NotificationRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "document_id",
+                "document_type"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "document_id": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.RevokeDocumentRequest": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "document_type",
+                "revocation"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                },
+                "revocation": {
+                    "$ref": "#/definitions/model.Revocation"
+                }
+            }
+        },
+        "apiv1.RevokeReply": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "apiv1.RevokeRequest": {
+            "type": "object",
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "document_id": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                },
+                "revocation_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1.UploadRequest": {
+            "type": "object",
+            "required": [
+                "document_data",
+                "document_data_version",
+                "meta"
+            ],
+            "properties": {
+                "document_data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "document_data_version": {
+                    "type": "string"
+                },
+                "document_display": {
+                    "$ref": "#/definitions/model.DocumentDisplay"
+                },
+                "identities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Identity"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/model.MetaData"
+                }
+            }
+        },
+        "apiv1_issuer.Jwk": {
+            "type": "object",
+            "properties": {
+                "crv": {
+                    "type": "string"
+                },
+                "d": {
+                    "type": "string"
+                },
+                "kid": {
+                    "type": "string"
+                },
+                "kty": {
+                    "type": "string"
+                },
+                "x": {
+                    "type": "string"
+                },
+                "y": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiv1_issuer.JwksReply": {
+            "type": "object",
+            "properties": {
+                "issuer": {
+                    "type": "string"
+                },
+                "jwks": {
+                    "$ref": "#/definitions/apiv1_issuer.Keys"
+                }
+            }
+        },
+        "apiv1_issuer.Keys": {
+            "type": "object",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/apiv1_issuer.Jwk"
+                    }
+                }
+            }
+        },
+        "apiv1_issuer.MakeSDJWTReply": {
+            "type": "object",
+            "properties": {
+                "disclosures": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "jwt": {
+                    "type": "string"
+                }
+            }
+        },
+        "helpers.Error": {
+            "type": "object",
+            "properties": {
+                "details": {},
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "helpers.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/helpers.Error"
+                }
+            }
+        },
+        "model.Collect": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "required: false\nexample: 98fe67fc-c03f-11ee-bbee-4345224d414f",
+                    "type": "string"
+                },
+                "valid_until": {
+                    "description": "required: false\nexample: 509567558\nformat: int64",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Consent": {
+            "type": "object",
+            "required": [
+                "consent_to",
+                "created_at",
+                "session_id"
+            ],
+            "properties": {
+                "consent_to": {
+                    "description": "required: true\nexample: \"Using my data for research\"",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "required: true\nexample: 509567558\nformat: int64",
+                    "type": "integer"
+                },
+                "session_id": {
+                    "description": "required: true\nexample: \"sess-123\"",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Document": {
+            "type": "object",
+            "required": [
+                "document_data",
+                "meta"
+            ],
+            "properties": {
+                "document_data": {},
+                "meta": {
+                    "$ref": "#/definitions/model.MetaData"
+                }
+            }
+        },
+        "model.DocumentDisplay": {
+            "type": "object",
+            "required": [
+                "description_structured",
+                "type",
+                "version"
+            ],
+            "properties": {
+                "description_structured": {
+                    "description": "DescriptionStructured is a map of structured descriptions\nrequired: true\nexample: {\"en\": \"European Health Insurance Card\", \"sv\": \"Europeiskt sjukförsäkringskortet\"}",
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "type": {
+                    "description": "required: true\nexample: secure",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "required: true\nexample: \"1.0.0\"",
+                    "type": "string"
+                }
+            }
+        },
+        "model.DocumentList": {
+            "type": "object",
+            "required": [
+                "meta",
+                "qr"
+            ],
+            "properties": {
+                "document_display": {
+                    "$ref": "#/definitions/model.DocumentDisplay"
+                },
+                "meta": {
+                    "$ref": "#/definitions/model.MetaData"
+                },
+                "qr": {
+                    "$ref": "#/definitions/model.QR"
+                }
+            }
+        },
+        "model.IDMapping": {
+            "type": "object",
+            "properties": {
+                "authentic_source_person_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Identity": {
+            "type": "object",
+            "required": [
+                "schema"
+            ],
+            "properties": {
+                "authentic_source_person_id": {
+                    "description": "required: true\nexample: 65636cbc-c03f-11ee-8dc4-67135cc9bd8a",
+                    "type": "string"
+                },
+                "birth_city": {
+                    "description": "required: false\nexample: Stockholm",
+                    "type": "string"
+                },
+                "birth_country": {
+                    "description": "TODO(masv): full name or just country code?\nrequired: false\nexample: sweden",
+                    "type": "string"
+                },
+                "birth_date": {
+                    "description": "required: true\nexample: 1970-01-01",
+                    "type": "string"
+                },
+                "birth_place": {
+                    "description": "required: false\nexample: Stockholm",
+                    "type": "string"
+                },
+                "birth_state": {
+                    "description": "required: false\nexample: Stockholm",
+                    "type": "string"
+                },
+                "family_name": {
+                    "description": "required: true\nexample: Svensson",
+                    "type": "string"
+                },
+                "family_name_at_birth": {
+                    "description": "required: false\nexample: Karlsson",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "required: false\nexample: male",
+                    "type": "string"
+                },
+                "given_name": {
+                    "description": "required: true\nexample: Magnus",
+                    "type": "string"
+                },
+                "given_name_at_birth": {
+                    "description": "required: false\nexample: Magnus",
+                    "type": "string"
+                },
+                "nationality": {
+                    "description": "required: false\nexample: swedish",
+                    "type": "string"
+                },
+                "resident_address": {
+                    "description": "required: false\nexample: 221b baker street",
+                    "type": "string"
+                },
+                "resident_city": {
+                    "description": "required: false\nexample: london",
+                    "type": "string"
+                },
+                "resident_country": {
+                    "description": "required: false\nexample: england",
+                    "type": "string"
+                },
+                "resident_house_number": {
+                    "description": "required: false\nexample: 221b",
+                    "type": "string"
+                },
+                "resident_postal_code": {
+                    "description": "required: false\nexample: W1U 6SG",
+                    "type": "string"
+                },
+                "resident_state": {
+                    "description": "required: false\nexample: england",
+                    "type": "string"
+                },
+                "resident_street": {
+                    "description": "required: false\nexample: baker street",
+                    "type": "string"
+                },
+                "schema": {
+                    "$ref": "#/definitions/model.IdentitySchema"
+                }
+            }
+        },
+        "model.IdentitySchema": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "description": "required: true\nexample: \"SE\"",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "required: false\nexample: \"1.0.0\"",
+                    "type": "string"
+                }
+            }
+        },
+        "model.MetaData": {
+            "type": "object",
+            "required": [
+                "authentic_source",
+                "document_id",
+                "document_type",
+                "document_version"
+            ],
+            "properties": {
+                "authentic_source": {
+                    "description": "required: true\nexample: SUNET",
+                    "type": "string"
+                },
+                "collect": {
+                    "$ref": "#/definitions/model.Collect"
+                },
+                "credential_valid_from": {
+                    "description": "required: false\nexample: 509567558\nformat: int64",
+                    "type": "integer"
+                },
+                "credential_valid_to": {
+                    "description": "required: false\nexample: 509567558\nformat: int64",
+                    "type": "integer"
+                },
+                "document_id": {
+                    "description": "required: true\nexample: 5e7a981c-c03f-11ee-b116-9b12c59362b9",
+                    "type": "string"
+                },
+                "document_type": {
+                    "description": "required: true\nexample: PDA1",
+                    "type": "string",
+                    "enum": [
+                        "PDA1",
+                        "EHIC"
+                    ]
+                },
+                "document_version": {
+                    "description": "required: true\nexample: \"1.0.0\"",
+                    "type": "string"
+                },
+                "real_data": {
+                    "description": "RealData is a flag to indicate if the document contains real data\nrequired: true\nexample: true",
+                    "type": "boolean"
+                },
+                "revocation": {
+                    "description": "Revocation is a collection of fields representing a revocation",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.Revocation"
+                        }
+                    ]
+                }
+            }
+        },
+        "model.QR": {
+            "type": "object",
+            "required": [
+                "base64_image",
+                "deep_link"
+            ],
+            "properties": {
+                "base64_image": {
+                    "description": "required: true\nexample: \"ZWFzdGVyIGVnZyE=\"",
+                    "type": "string"
+                },
+                "deep_link": {
+                    "description": "required: true\nexample: \"https://example.com\"",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Revocation": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID is the ID of the revocation\nrequired: false\nexample: 8dbd2680-c03f-11ee-a21b-034aafe41222",
+                    "type": "string"
+                },
+                "reason": {
+                    "description": "Reason is the reason for revocation\nrequired: false\nexample: lost or stolen",
+                    "type": "string"
+                },
+                "reference": {
+                    "$ref": "#/definitions/model.RevocationReference"
+                },
+                "revoked": {
+                    "description": "Revoked is a flag to indicate if the document has been revoked\nrequired: false\nexample: false",
+                    "type": "boolean"
+                },
+                "revoked_at": {
+                    "description": "RevokedAt is the time the document was revoked or going to be revoked\nrequired: false\nexample: 509567558\nformat: int64",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RevocationReference": {
+            "type": "object",
+            "properties": {
+                "authentic_source": {
+                    "type": "string"
+                },
+                "document_id": {
+                    "type": "string"
+                },
+                "document_type": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
