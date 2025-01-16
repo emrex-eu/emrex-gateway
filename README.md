@@ -13,6 +13,7 @@ We are also planning on exporting transcript of records from a wallet to a Emrex
 ## We are planning to support the wwWallet (see links below)
 
 [wwWallet](https://demo.wwwallet.org/)
+
 [dc4eu Wallet](https://wallet.dc4eu.eu/)
 
 ## Execution
