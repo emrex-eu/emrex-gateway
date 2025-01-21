@@ -82,11 +82,15 @@ public class EmcController {
 		// TODO: currently returning to "index"
 		Apiv1NotificationReply notification = issuerService.notification(document_id);
 
-		logger.warn("Got deeplink: " + notification.getData().getDeepLink());
+		notification.getData().getBase64Image();
+		logger.warn("Got deeplink: " + notification.getData().getCredentialOffer());
 
 		model.addAttribute("title", "Emrex Gateway");
 		model.addAttribute("emps",new EmregRepresentation());
-		return "index";
+		model.addAttribute("qr_code", notification.getData().getBase64Image());
+		model.addAttribute("qr_url", notification.getData().getCredentialOffer());
+
+		return "success";
 	}
 
 	private boolean verifyElmoSignature(EwpResponse emrexResponse, String elmo) {

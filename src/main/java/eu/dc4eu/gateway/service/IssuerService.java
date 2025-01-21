@@ -1,5 +1,7 @@
 package eu.dc4eu.gateway.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,8 @@ import lombok.Getter;
 @Component
 @Getter
 public class IssuerService {
+
+	Logger logger = LoggerFactory.getLogger(IssuerService.class);
 
 	String issuerRequestMock= """
 			{
@@ -116,6 +120,9 @@ public class IssuerService {
 	private String issuerURL;
 
 	public String upload(String document_id, String person_id, String collect_id) {
+
+		logger.warn("Issuer URL: {}", issuerURL);
+
 		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id);
 
 

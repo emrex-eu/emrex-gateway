@@ -1,0 +1,18 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">Title</title>
+</head>
+<body>
+
+
+<div>
+	<h2>Success</h2>
+
+	<img th:src="${'data:image/png;base64,' + qr_code}" alt="" height="200" width="200">
+	<a th:href="@{${qr_url}}">Add to Wallet</a>
+</div>
+</body>
+</html>
