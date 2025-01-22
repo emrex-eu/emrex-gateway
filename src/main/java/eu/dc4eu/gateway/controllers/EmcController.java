@@ -5,6 +5,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 import eu.dc4eu.gateway.elmo.CertificateHelper;
+import eu.dc4eu.gateway.elmo.api.Attachment;
 import eu.dc4eu.gateway.emreg.AcronymRepresentation;
 import eu.dc4eu.gateway.issuer.Apiv1NotificationReply;
 import eu.dc4eu.gateway.service.IssuerService;
@@ -45,7 +46,7 @@ public class EmcController {
 
 	@PostMapping(value = "/onReturn", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String onReturn(Model model, EwpResponse emrexResponse) {
-		logger.info("Received response from EMREX: " + emrexResponse);
+		logger.info("Received response from EMREX: " + emrexResponse.toString().substring(0,100)+"...");
 
 		ElmoTojava elmoTojava = new ElmoTojava();
 		String elmo = elmoTojava.frånGz64(emrexResponse.getElmo());
@@ -61,7 +62,7 @@ public class EmcController {
 		}
 
 		logger.info("parsed  Elmo: " + elmoparsed.getLearner().getGivenNames());
-		/*
+
 
 		byte[] elmo64 = Base64.getEncoder().encode(elmo.getBytes(StandardCharsets.UTF_8));
 
@@ -72,8 +73,8 @@ public class EmcController {
 		byte[] data = Base64.getDecoder().decode(response.getContent().getBytes(StandardCharsets.UTF_8));
 
 		logger.warn("ELM: {}", new String(data));
-*/
-		String person_id="1212121234";
+
+		String person_id=getPersonId(elmoparsed);
 		String document_id= UUID.randomUUID().toString();
 		String collect_id= UUID.randomUUID().toString();
 
@@ -91,6 +92,15 @@ public class EmcController {
 		model.addAttribute("qr_url", notification.getData().getCredentialOffer());
 
 		return "success";
+	}
+
+	private String getPersonId(Elmo elmoparsed) {
+		for (Elmo.Learner.Identifier identifier : elmoparsed.getLearner().getIdentifier()) {
+			if (identifier.getType().equals("nationalIdentifier")) {
+				return identifier.getValue();
+			}
+		}
+		return elmoparsed.getLearner().getBday().toString();
 	}
 
 	private boolean verifyElmoSignature(EwpResponse emrexResponse, String elmo) {

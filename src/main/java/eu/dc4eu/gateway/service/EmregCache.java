@@ -23,7 +23,7 @@ public class EmregCache {
 																													   .isEmpty()) {
 											   return acronymRepresentation.getName().equals(acronym);
 										   } else {
-											   return acronymRepresentation.getInstitutions().getFirst().equals(acronym);
+											   return acronymRepresentation.getInstitutions().get(0).equals(acronym);
 										   }
 									   })
 									   .findFirst()
@@ -32,24 +32,22 @@ public class EmregCache {
 
 	private static EmregCountryRepresentation getCountryRepresentationFrom(String acronym) {
 
-		return emregRepresentationcahce.getEmregCountryRepresentations().stream()
-									   .flatMap(emregCountryRepresentation -> emregCountryRepresentation.getEmps().stream()
-																										.filter(acronymRepresentation -> {
-																											if (emregCountryRepresentation.isSingleFetch()) {
-																												return (acronymRepresentation.getInstitutions() == null || acronymRepresentation.getInstitutions()
-																																																.isEmpty()) ?
-																													   acronymRepresentation.getName()
-																																			.equals(acronym) :
-																													   acronymRepresentation.getInstitutions()
-																																			.getFirst()
-																																			.equals(acronym);
-																											} else {
-																												return true;
-																											}
-																										})
-																										.map(acronymRepresentation -> emregCountryRepresentation))
-									   .findFirst()
-									   .orElse(null);
+		for (EmregCountryRepresentation emregCountryRepresentation : emregRepresentationcahce.getEmregCountryRepresentations()) {
+			for (AcronymRepresentation acronymRepresentation : emregCountryRepresentation.getEmps()) {
+				if (acronymRepresentation.getInstitutions() == null || acronymRepresentation.getInstitutions()
+																												.isEmpty()) {
+					if (acronymRepresentation.getName().equals(acronym)) {
+						return emregCountryRepresentation;
+					}
+				} else {
+					if (acronymRepresentation.getInstitutions().get(0).equals(acronym)) {
+						return emregCountryRepresentation;
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static GatewaySession createSession(String acronym) {
@@ -60,7 +58,7 @@ public class EmregCache {
 																						.isEmpty()) {
 				acronymName = acronymRepresentation.getName();
 			} else {
-				acronymName = acronymRepresentation.getInstitutions().getFirst();
+				acronymName = acronymRepresentation.getInstitutions().get(0);
 			}
 		}
 		GatewaySession session = new GatewaySession(getCountryRepresentationFrom(acronym).getCountryCode(), acronymName, Objects.requireNonNull(getAcronymFor(acronym))

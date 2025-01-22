@@ -3,6 +3,7 @@ services:
     build:
       context: .
     environment:
+      DC4EU_ISSUER_URL: http://vc-interop-1.sunet.se/api/v1
       _JAVA_OPTIONS: >
         -Xdebug
         -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
@@ -15,7 +16,8 @@ services:
         - dc4eu-network
 
   converter:
-    image: johanekblad123/dc4eu-converter:latest
+#   image: johanekblad123/dc4eu-converter:latest
+    image: dockerrepo.govpart.de/dc4euconverter:0.0.1
     ports:
       - "8090:8080"
     networks:
