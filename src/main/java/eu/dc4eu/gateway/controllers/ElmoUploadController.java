@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +24,7 @@ import eu.dc4eu.gateway.service.IssuerService;
 import jakarta.inject.Inject;
 
 @Controller
-@RequestMapping("/emc")
+@RequestMapping("/upload")
 public class ElmoUploadController {
 
 
@@ -40,10 +39,10 @@ public class ElmoUploadController {
 	);
 
 
-	Logger logger = LoggerFactory.getLogger(EmcController.class);
+	Logger logger = LoggerFactory.getLogger(ElmoUploadController.class);
 
 	@PostMapping(value = "/uploadElmo")
-	public String submit(Model model, @RequestParam("file") MultipartFile file, ModelMap modelMap) {
+	public String submit(Model model, @RequestParam("file") MultipartFile file) {
 		try {
 			String content = new String(file.getBytes());
 			ElmoTojava elmoTojava = new ElmoTojava();
@@ -55,7 +54,8 @@ public class ElmoUploadController {
 			}
 
 			Elmo elmoparsed = elmoTojava.transformeraFrånXml(elmo);
-			Response response = converterService.convertElmoToElm(elmo);
+			byte[] elmoData = Base64.getEncoder().encode(elmo.getBytes(StandardCharsets.UTF_8));
+			Response response = converterService.convertElmoToElm(new String(elmoData));
 
 			logger.warn("Response: {}", response);
 
