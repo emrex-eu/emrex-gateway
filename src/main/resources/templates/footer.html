@@ -1,10 +1,10 @@
 <footer class="bg-dark text-light py-4 pt-6" th:fragment="footer">
-	<div class="container text-center">
+	<div class="container-fluid container-sm container-md text-center">
 		<p class="mb-0">EMREX-Gateway</p>
 		<p class="small mb-0">Powered by <a href="https://www.emrex.eu" target="_blank" class="text-light">EMREX</a></p>
-<!--		<div class="mt-3">-->
-			<img th:src="@{/ladok-white.svg}" alt="Ladok Logo" height="50">
-<!--			<img th:src="@{/sikt.png}" alt="dc4eu logo" height="75" width="100" class="me-3">-->
-<!--		</div>-->
+		<div class="mt-3 d-flex justify-content-center">
+			<img th:src="@{/ladok-white.svg}" alt="Ladok Logo" height="40" class="me-3 logo">
+			<img th:src="@{/sikt.png}" alt="sikt logo" height="40" class="logo">
+		</div>
 	</div>
 </footer>
