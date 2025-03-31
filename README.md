@@ -27,9 +27,11 @@ mvn spring-boot:run
 
 or using docker-compose:
 
+You can start the application by running the following command: just set reguired environment variables in the docker-compose.yml if the default values are not suitable for you.
 ```
 docker-compose up --build
 ```
 
+Then you can access the application on http://localhost:8080
 
 
