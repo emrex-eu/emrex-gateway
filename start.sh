@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar /usr/app/gateway.jar
+cd /usr/app & java -jar /usr/app/gateway.jar

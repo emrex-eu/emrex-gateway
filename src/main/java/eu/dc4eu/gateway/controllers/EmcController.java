@@ -5,13 +5,13 @@ import java.util.Base64;
 import java.util.UUID;
 
 import eu.dc4eu.gateway.elmo.CertificateHelper;
-import eu.dc4eu.gateway.elmo.api.Attachment;
 import eu.dc4eu.gateway.emreg.AcronymRepresentation;
 import eu.dc4eu.gateway.issuer.Apiv1NotificationReply;
 import eu.dc4eu.gateway.service.IssuerService;
 import eu.dc4eu.gateway.service.SessionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import eu.dc4eu.gateway.ConverterService;
 import eu.dc4eu.gateway.EwpResponse;
@@ -41,6 +39,9 @@ public class EmcController {
 
 	@Inject
 	private IssuerService issuerService;
+
+	@Value("${dc4eu.return.url}")
+	private String returnHost = "http://localhost:8080";
 
 	Logger logger = LoggerFactory.getLogger(EmcController.class);
 
@@ -133,7 +134,7 @@ public class EmcController {
 		GatewaySession session = EmregCache.createSession(acronym);
 		model.addAttribute("sessionId", session.getSessionId());
 		model.addAttribute("url", session.getUrl());
-		model.addAttribute("returnUrl", "http://localhost:8080/emc/onReturn");
+		model.addAttribute("returnUrl", returnHost + "/emc/onReturn");
 
 		return "session";
 	}

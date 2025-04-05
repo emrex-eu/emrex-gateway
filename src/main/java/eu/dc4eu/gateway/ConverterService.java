@@ -2,6 +2,7 @@ package eu.dc4eu.gateway;
 
 import java.util.List;
 
+import eu.dc4eu.gateway.converter.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,10 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import eu.dc4eu.gateway.converter.Parameters;
-import eu.dc4eu.gateway.converter.Protocol;
-import eu.dc4eu.gateway.converter.Request;
-import eu.dc4eu.gateway.converter.Response;
 import lombok.Getter;
 
 
@@ -29,10 +26,11 @@ public class ConverterService {
 		fromProtocol.setName("elmo");
 		fromProtocol.setVersion("1.7");
 		Protocol toProtocol = new Protocol();
-		toProtocol.setName("elm");
+		toProtocol.setName("elm_ebsi");
 		toProtocol.setVersion("3.2");
 		Parameters parameters = new Parameters();
 		parameters.setPreferredLanguages(List.of("en", "sv", "no"));
+		parameters.setDefaultLanguage("en");
 		Request request = new Request();
 		request.setFrom(fromProtocol);
 		request.setTo(toProtocol);
