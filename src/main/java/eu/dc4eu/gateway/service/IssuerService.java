@@ -78,9 +78,9 @@ public class IssuerService {
 
 	String issuerNotificationMock= """
 			{
-			  "authentic_source": "SUNET",
+			  "authentic_source": "LADOK",
 			  "document_id": "$document_id$",
-			  "document_type": "EHIC"
+			  "document_type": "ELM"
 			}
 			 
  """;
