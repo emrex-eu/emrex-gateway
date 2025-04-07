@@ -71,7 +71,9 @@ public class EmcController {
 
 		logger.warn("Response: {}", response);
 
-		byte[] data = Base64.getDecoder().decode(response.getContent().getBytes(StandardCharsets.UTF_8));
+		String elmAsBase64 = response.getContent();
+
+		byte[] data = Base64.getDecoder().decode(elmAsBase64.getBytes(StandardCharsets.UTF_8));
 
 		logger.warn("ELM: {}", new String(data));
 
@@ -79,7 +81,7 @@ public class EmcController {
 		String document_id= UUID.randomUUID().toString();
 		String collect_id= UUID.randomUUID().toString();
 
-		String issuerResponse = issuerService.upload(document_id, person_id, collect_id);
+		String issuerResponse = issuerService.upload(document_id, person_id, collect_id, elmAsBase64);
 		logger.warn("Issuer response:"+issuerResponse);
 		// TODO: currently returning to "index"
 		Apiv1NotificationReply notification = issuerService.notification(document_id);

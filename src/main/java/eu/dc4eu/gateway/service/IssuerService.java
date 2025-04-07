@@ -1,5 +1,6 @@
 package eu.dc4eu.gateway.service;
 
+import org.apache.catalina.realm.AuthenticatedUserRealm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,39 +29,7 @@ public class IssuerService {
 			{
 
 			    "document_data": {
-			      "cardHolder": {
-			        "birthDate": "1966-06-19 05:37:25.429824508 +0000 UTC",
-			        "cardholderStatus": "inactive",
-			        "familyName": "Herzog",
-			        "givenName": "Sanford",
-			        "id": "da9a2731-5c56-4b22-8345-da6791221e13"
-			      },
-			      "cardInformation": {
-			        "expiryDate": "1962-11-17 05:00:01.116373494 +0000 UTC",
-			        "id": "d0584540-ef52-4be7-8220-98e722e6d238",
-			        "invalidSince": "1908-09-13 14:37:16.135653581 +0000 UTC",
-			        "issuanceDate": "1928-12-11 20:03:56.642216763 +0000 UTC",
-			        "signature": {
-			          "issuer": "Chubb",
-			          "seal": "ca6ed58c-0fcf-4937-a4d0-5b6a24cf1a3b"
-			        },
-			        "validSince": "1929-11-23 10:56:43.877367366 +0000 UTC"
-			      },
-			      "competentInstitution": {
-			        "id": "34c04521-5013-4c76-b27a-dd63e665b4bf",
-			        "institutionName": "Scale Unlimited"
-			      },
-			      "pid": {
-			        "exhibitorID": "3043447571",
-			        "firstName": "Sanford",
-			        "gender": "female",
-			        "lastName": "Herzog",
-			        "pins": []
-			      },
-			      "signature": {
-			        "issuer": "Energy Solutions Forum",
-			        "seal": "20ab322b-cd01-4aec-a935-e2bffb21df29"
-			      }
+			      "elm": "$elm_base64$"
 			    },
 			    "document_data_version": "1.0.0",
 			    "document_display": {
@@ -68,7 +37,7 @@ public class IssuerService {
 			        "en": "issuer",
 			        "sv": "utfärdare"
 			      },
-			      "type": "EHIC",
+			      "type": "ELM",
 			      "version": "1.0.0"
 			    },
 			    "identities": [
@@ -84,7 +53,7 @@ public class IssuerService {
 			      }
 			    ],
 			    "meta": {
-			      "authentic_source": "SUNET",
+			      "authentic_source": "LADOK",
 			      "collect": {
 			        "id": "$collect_id$",
 			        "valid_until": 1731228637
@@ -92,15 +61,15 @@ public class IssuerService {
 			      "credential_valid_from": -1755784082,
 			      "credential_valid_to": -176812047,
 			      "document_id": "$document_id$",
-			      "document_type": "EHIC",
+			      "document_type": "ELM",
 			      "document_version": "1.0.0",
 			      "real_data": false,
 			      "revocation": {
 			        "id": "e6b6e99d-921b-4b17-88c5-f1ab5f937dba",
 			        "reference": {
-			          "authentic_source": "SUNET",
+			          "authentic_source": "LADOK",
 			          "document_id": "$document_id$",
-			          "document_type": "EHIC"
+			          "document_type": "ELM"
 			        }
 			      }
 			    }
@@ -119,11 +88,11 @@ public class IssuerService {
 	@Value("${dc4eu.issuer.url}")
 	private String issuerURL;
 
-	public String upload(String document_id, String person_id, String collect_id) {
+	public String upload(String document_id, String person_id, String collect_id, String elm) {
 
 		logger.warn("Issuer URL: {}", issuerURL);
 
-		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id);
+		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id, elm);
 
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -159,12 +128,13 @@ public class IssuerService {
 	}
 
 
-	public Apiv1UploadRequest convertToRequest(String issuerData, String document_id, String person_id, String collect_id)  {
+	public Apiv1UploadRequest convertToRequest(String issuerData, String document_id, String person_id, String collect_id, String elm)  {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Apiv1UploadRequest request = null;
 		try {
 			request = objectMapper.readValue(issuerData.replace("$document_id$", document_id)
 													   .replace("$person_id$",person_id)
+													   .replace("$elm_base64$", elm)
 													   .replace("$collect_id$",collect_id), Apiv1UploadRequest.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
