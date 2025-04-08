@@ -1,9 +1,19 @@
 package eu.dc4eu.gateway.controllers;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.UUID;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import eu.dc4eu.gateway.elm.AddressDTO;
+import eu.dc4eu.gateway.elm.ConceptDTO;
+import eu.dc4eu.gateway.elm.LocationDTO;
+import eu.dc4eu.gateway.elm.OrganisationDTO;
 import eu.dc4eu.gateway.elmo.CertificateHelper;
 import eu.dc4eu.gateway.emreg.AcronymRepresentation;
 import eu.dc4eu.gateway.issuer.Apiv1NotificationReply;
@@ -46,7 +56,7 @@ public class EmcController {
 	Logger logger = LoggerFactory.getLogger(EmcController.class);
 
 	@PostMapping(value = "/onReturn", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String onReturn(Model model, EwpResponse emrexResponse) {
+	public String onReturn(Model model, EwpResponse emrexResponse) throws IOException {
 		logger.info("Received response from EMREX: " + emrexResponse.toString().substring(0,100)+"...");
 
 		ElmoTojava elmoTojava = new ElmoTojava();
@@ -80,6 +90,7 @@ public class EmcController {
 		String person_id=getPersonId(elmoparsed);
 		String document_id= UUID.randomUUID().toString();
 		String collect_id= UUID.randomUUID().toString();
+		elmAsBase64 = addMissingProperties(data, document_id);  // add missing properties to elm to make it validate
 
 		String issuerResponse = issuerService.upload(document_id, person_id, collect_id, elmAsBase64);
 		logger.warn("Issuer response:"+issuerResponse);
@@ -141,5 +152,22 @@ public class EmcController {
 		return "session";
 	}
 
+	/*
+	add some constant properties to elm for validation, just some fixed pilot values.
+	 */
+	String addMissingProperties(byte[] elm, String id) throws IOException {
 
+		JsonNode root = new ObjectMapper().readTree(elm);
+
+		ZonedDateTime now = ZonedDateTime.now();
+		((ObjectNode) root).put("id", "uri:" + id);
+		((ObjectNode) root).put("issuanceDate", now.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+		AddressDTO address = new AddressDTO(new ConceptDTO());
+		LocationDTO locationDTO = new LocationDTO(address);
+		OrganisationDTO issuerOrg = new OrganisationDTO(locationDTO);
+		issuerOrg.getLegalName().put("sv", "Ladok/Sikt pilot");
+		issuerOrg.getLegalName().put("no", "Ladok/Sikt pilot");
+		((ObjectNode) root).putPOJO("issuer", issuerOrg);
+		return new String(Base64.getEncoder().encode(new ObjectMapper().writeValueAsBytes(root)));
+	}
 }
