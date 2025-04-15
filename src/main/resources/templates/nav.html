@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" th:fragment="navbar">
 	<div class="container d-flex justify-content-between align-items-center">
-		<a class="navbar-brand" href="#">Emrex Gateway</a>
+		<a class="navbar-brand" href="/">Emrex Gateway</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -8,7 +8,8 @@
 	</div>
 	<div class="container">
 		<div class="collapse navbar-collapse" id="navbarNav">
-			<form class="d-flex bg-dark" method="post" th:action="@{/upload/uploadElmo}" enctype="multipart/form-data">
+			<!-- Conditionally render the upload form -->
+			<form class="d-flex bg-dark" method="post" th:if="${showupload}" th:action="@{/upload/uploadElmo}" enctype="multipart/form-data">
 				<input class="form-control form-control-sm me-2" name="file" id="file" type="file" onchange="toggleButton()">
 				<button class="btn btn-secondary btn-sm" id="uploadButton" type="submit"
 						data-bs-toggle="tooltip" data-bs-placement="right" title="Upload an elmo file" disabled>Upload
