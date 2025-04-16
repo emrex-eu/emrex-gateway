@@ -1,26 +1,22 @@
 package eu.dc4eu.gateway.elmo;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 
 import eu.dc4eu.gateway.elmo.api.Elmo;
 import jakarta.inject.Inject;
@@ -36,43 +32,35 @@ public class ElmoImportReader {
 	@Inject
 	private ElmoTojava elmoTojava;
 
-	private List<String> getFilesInDirectory() {
-		String pattern = "classpath:/" + importDirectory + "/*.xml";
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-		Resource[] resources = null;
-		try {
-			resources = resolver.getResources(pattern);
-		} catch (IOException e) {
-			logger.warn("Could not read directory: " + importDirectory);
+	private List<File> getFilesInDirectory() {
+		File directory = new File(importDirectory);
+		if (!directory.exists()) {
+			directory.mkdirs();
 		}
-		List<String> fileNames = new ArrayList<>();
-		for (Resource resource : resources) {
-			fileNames.add(resource.getFilename());
+		if (!directory.isDirectory()) {
+			logger.warn("Provided path is not a directory: " + importDirectory);
+			return null;
 		}
-		return fileNames;
-/*
-		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-		File path = new File(classloader.getResource(importDirectory).getFile());
-		logger.warn("Reading directory: " + path.getAbsolutePchatgpt.ath());
-		return Stream.of(path.listFiles())
-					 .filter(file -> !file.isDirectory())
-					 .map(File::getName)
-					 .collect(Collectors.toList());
+		File [] files = directory.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".xml");
+			}
+		});
 
- */
+		return Arrays.stream(files).toList();
 	}
 
 	public List<ElmoImportData> importFromDir() {
 		List<ElmoImportData> elmoList = new ArrayList<>();
-		for (String fileName : getFilesInDirectory()) {
-			int id = getIdFromFilename(fileName);
+		for (File file : getFilesInDirectory()) {
+			long id = getIdFromFilename(file);
 
 			String elmoXml = null;
 			Elmo elmo = null;
 
 			try {
-				ClassPathResource resource = new ClassPathResource(importDirectory + File.separator + fileName);
-				elmoXml = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+				elmoXml = Files.readString(file.toPath(), StandardCharsets.UTF_8);
 				elmo = elmoTojava.transformeraFrånXml(elmoXml);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -84,11 +72,22 @@ public class ElmoImportReader {
 				elmoList.add(elmoImportData);
 			}
 		}
+
+		elmoList.sort(Comparator.comparingLong(ElmoImportData::getId).reversed());
+
 		return elmoList;
 	}
 
-	// fileName is of the form n.xml (where n is a number)
-	private int getIdFromFilename(String fileName) {
-		return Integer.parseInt(fileName.substring(0, fileName.indexOf('.')));
+	public static long getMaxId(List<ElmoImportData> elmoList) {
+		return elmoList.stream()
+				.mapToLong(ElmoImportData::getId)
+				.max()
+				.orElse(0);
+	}
+
+	// file is of the form n.xml (where n is a number)
+	private long getIdFromFilename(File file) {
+		String fileName = file.getName();
+		return Long.parseLong(fileName.substring(0, fileName.indexOf('.')));
 	}
 }

@@ -14,6 +14,7 @@ services:
       - "5005:5005"
     volumes:
       - ${MAVEN_SETTINGS_FOLDER}:/root/.m2
+      - ./imported_elmos:/root/imported_elmos
     networks:
         - dc4eu-network
 
