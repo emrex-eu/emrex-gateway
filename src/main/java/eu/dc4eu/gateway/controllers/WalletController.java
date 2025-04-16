@@ -16,4 +16,12 @@ public class WalletController {
 		model.addAttribute("showupload",false);
 		return "wallet";
 	}
+
+	@GetMapping("/qrcode")
+	public String getQrcode(final Model model) {
+		model.addAttribute("title", "Emrex Gateway");
+		model.addAttribute("showupload",false);
+		model.addAttribute("qr_code", null);
+		return "wallet";
+	}
 }

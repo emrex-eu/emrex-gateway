@@ -1,3 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
 <div th:replace="~{head:: head}"></div>
 
+
+<script>
+    const socket = new WebSocket("ws://localhost:8080/ws/updates");
+
+    socket.onmessage = function(event) {
+        const updatesDiv = document.getElementById("updates");
+        const newItem = document.createElement("div");
+        newItem.textContent = event.data;
+        updatesDiv.appendChild(newItem);
+    };
+</script>
+<body>
 <div th:replace="~{nav :: navbar}"></div>
+
+<main class="container mt-4">
+<a href="/vc/qrcode" class="btn btn-primary">GET QRCODE</a>
+	<div class="text-center">
+		<div th:if="${qr_code != null}">
+			<img th:src="${'data:image/png;base64,' + qr_code}" alt="" height="400" width="400" class="mb-3">
+			<p>
+				<a th:href="@{${qr_url}}" class="btn btn-primary">Get from Wallet</a>
+			</p>
+		</div>
+
+	</div>
+
+	<div>
+		<h2>Updates</h2>
+		<div id="updates" class="updates">
+			<!-- WebSocket updates will be appended here -->
+		</div>
+	</div>
+</main>
+</body>
+</html>
