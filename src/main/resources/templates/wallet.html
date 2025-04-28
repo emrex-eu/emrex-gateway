@@ -8,7 +8,7 @@
 <script>
     const socket = new WebSocket("ws://localhost:8080/ws/updates");
 
-    socket.onmessage = function(event) {
+    socket.onmessage = function (event) {
         const updatesDiv = document.getElementById("updates");
         const newItem = document.createElement("div");
         newItem.textContent = event.data;
@@ -19,17 +19,20 @@
 <div th:replace="~{nav :: navbar}"></div>
 
 <main class="container mt-4">
-<a href="/vc/qrcode" class="btn btn-primary">GET QRCODE</a>
 	<div class="text-center">
 		<div th:if="${qr_code != null}">
 			<img th:src="${'data:image/png;base64,' + qr_code}" alt="" height="400" width="400" class="mb-3">
+<!--			<p>-->
+<!--				<a th:href="@{${qr_url}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Get from Wallet</a>-->
+<!--			</p>-->
 			<p>
-				<a th:href="@{${qr_url}}" class="btn btn-primary">Get from Wallet</a>
+				<a th:href="@{${dc4euWWWalletURL}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Open in DC4euwallet</a>
+			</p>
+			<p>
+				<a th:href="@{${openInDemoWWWalletButton}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Open in demo wwWallet</a>
 			</p>
 		</div>
-
 	</div>
-
 	<div>
 		<h2>Updates</h2>
 		<div id="updates" class="updates">
