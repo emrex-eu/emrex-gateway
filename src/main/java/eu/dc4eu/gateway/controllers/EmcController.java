@@ -60,8 +60,8 @@ public class EmcController {
 		logger.info("Received response from EMREX: " + emrexResponse.toString().substring(0,100)+"...");
 
 		ElmoTojava elmoTojava = new ElmoTojava();
-		String elmo = elmoTojava.frånGz64(emrexResponse.getElmo());
-		Elmo elmoparsed = elmoTojava.transformeraFrånXml(elmo);
+		String elmo = elmoTojava.fromGz64(emrexResponse.getElmo());
+		Elmo elmoparsed = elmoTojava.transformFromXml(elmo);
 
 		boolean signatureOK = verifyElmoSignature(emrexResponse, elmo);
 

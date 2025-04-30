@@ -22,7 +22,7 @@ import jakarta.xml.bind.Unmarshaller;
 @Component
 public class ElmoTojava {
 
-	public String transformeraTillXml(Elmo elmo) {
+	public String transformToXml(Elmo elmo) {
 		try {
 			JAXBContext context = JAXBContext.newInstance(Elmo.class);
 			Marshaller marshaller = context.createMarshaller();
@@ -39,11 +39,11 @@ public class ElmoTojava {
 		}
 	}
 
-	public Elmo transformeraFrånXml(String elmoXml) {
+	public Elmo transformFromXml(String elmoXml) {
 		return unmarshal(elmoXml.getBytes());
 	}
 
-	public Elmo transformeraFrånXmlGz64(String elmoXmlGz64) {
+	public Elmo transformFromXmlGz64(String elmoXmlGz64) {
 		byte[] decompressBytes = new byte[0];
 		try {
 			decompressBytes = GzipUtil.gzipDecompressBytes(Base64.getDecoder().decode(elmoXmlGz64));
@@ -65,7 +65,7 @@ public class ElmoTojava {
 		}
 	}
 
-	public String tillGz64(String xml) {
+	public String toGz64(String xml) {
 		try {
 			byte[] compressedXml = GzipUtil.compress(xml);
 			return Base64.getEncoder().encodeToString(compressedXml);
@@ -74,7 +74,7 @@ public class ElmoTojava {
 		}
 	}
 
-	public String frånGz64(String elmoXmlGz64) {
+	public String fromGz64(String elmoXmlGz64) {
 		try {
 			return GzipUtil.gzipDecompress(Base64.getDecoder().decode(elmoXmlGz64));
 		} catch (IOException e) {
@@ -82,7 +82,7 @@ public class ElmoTojava {
 		}
 	}
 
-	public String frånGz(String s) {
+	public String fromGz(String s) {
 		try {
 			return GzipUtil.gzipDecompress(s.getBytes(StandardCharsets.UTF_8));
 		} catch (IOException e) {
@@ -91,7 +91,7 @@ public class ElmoTojava {
 		}
 	}
 
-	public String till64(String s) {
+	public String to64(String s) {
 		return Base64.getEncoder().encodeToString(s.getBytes(StandardCharsets.UTF_8));
 	}
 }

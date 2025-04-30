@@ -5,13 +5,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +19,9 @@ import eu.dc4eu.gateway.elmo.api.Elmo;
 import jakarta.inject.Inject;
 
 @Component
-public class ElmoImportReader {
+public class ElmoImportRW {
 
-	Logger logger = LoggerFactory.getLogger(ElmoImportReader.class);
+	Logger logger = LoggerFactory.getLogger(ElmoImportRW.class);
 
 	@Value("${imported.elmo.directory}")
 	private String importDirectory;
@@ -51,6 +48,24 @@ public class ElmoImportReader {
 		return Arrays.stream(files).toList();
 	}
 
+	public void writeToDir(ElmoImportData elmoImportData) {
+		File directory = new File(importDirectory);
+		if (!directory.exists()) {
+			directory.mkdirs();
+		}
+		if (!directory.isDirectory()) {
+			logger.warn("Provided path is not a directory: " + importDirectory);
+			return;
+		}
+
+		File file = new File(directory, elmoImportData.getId() + ".xml");
+		try {
+			Files.writeString(file.toPath(), elmoImportData.getElmoXml(), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			logger.error("Error writing to file: " + file.getAbsolutePath(), e);
+		}
+	}
+
 	public List<ElmoImportData> importFromDir() {
 		List<ElmoImportData> elmoList = new ArrayList<>();
 		for (File file : getFilesInDirectory()) {
@@ -61,14 +76,12 @@ public class ElmoImportReader {
 
 			try {
 				elmoXml = Files.readString(file.toPath(), StandardCharsets.UTF_8);
-				elmo = elmoTojava.transformeraFrånXml(elmoXml);
+				elmo = elmoTojava.transformFromXml(elmoXml);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			if (elmo != null) {
-				XMLGregorianCalendar timestampGreg = elmo.getGeneratedDate();
-				LocalDateTime timestamp = timestampGreg.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
-				ElmoImportData elmoImportData = new ElmoImportData(elmoXml, id, timestamp, elmo.getLearner().getGivenNames());
+				ElmoImportData elmoImportData = new ElmoImportData(elmoXml, elmo, id);
 				elmoList.add(elmoImportData);
 			}
 		}

@@ -2,6 +2,10 @@ package eu.dc4eu.gateway.elmo;
 
 import java.time.LocalDateTime;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import eu.dc4eu.gateway.elmo.api.Elmo;
+
 public class ElmoImportData {
 	private String elmoXml; // The elmo XML
 	private long id; // Id from the "REST FEED"
@@ -13,6 +17,18 @@ public class ElmoImportData {
 		this.id = id;
 		this.timestamp = timestamp;
 		this.name = name;
+	}
+
+	public ElmoImportData(String elmoXml, Elmo elmo, long id) {
+		this.elmoXml = elmoXml;
+		this.id = id;
+		setNameAndTimestampFromElmo(elmo);
+	}
+
+	private void setNameAndTimestampFromElmo(Elmo elmo) {
+		XMLGregorianCalendar timestampGreg = elmo.getGeneratedDate();
+		this.timestamp = timestampGreg.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
+		this.name = elmo.getLearner().getGivenNames();
 	}
 
 	public String getElmoXml() {

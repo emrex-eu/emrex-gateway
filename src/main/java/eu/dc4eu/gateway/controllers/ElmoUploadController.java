@@ -48,12 +48,12 @@ public class ElmoUploadController {
 			ElmoTojava elmoTojava = new ElmoTojava();
 			String elmo = "";
 			if (BASE64_PATTERN.matcher(content).matches()) {
-				elmo = elmoTojava.frånGz64(content);
+				elmo = elmoTojava.fromGz64(content);
 			} else {
 				elmo = content;
 			}
 
-			Elmo elmoparsed = elmoTojava.transformeraFrånXml(elmo);
+			Elmo elmoparsed = elmoTojava.transformFromXml(elmo);
 			byte[] elmoData = Base64.getEncoder().encode(elmo.getBytes(StandardCharsets.UTF_8));
 			Response response = converterService.convertElmoToElm(new String(elmoData));
 
