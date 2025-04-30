@@ -4,8 +4,16 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
+import eu.dc4eu.gateway.model.Disclosure;
+import eu.dc4eu.gateway.model.PaginatedVerificationRecordsReply;
+import eu.dc4eu.gateway.model.PaginatedVerificationRecordsRequest;
 import jakarta.inject.Inject;
 
 @Component
@@ -26,6 +34,8 @@ public class ElmoImportJob {
 
 		long currentId = retrieveCurrentIdFromFeed();
 
+		logger.info("Current ID from feed: " + currentId);
+
 		if (existingMaxId >= currentId) {
 			logger.info("No new Elmo files to import.");
 			return;
@@ -41,20 +51,47 @@ public class ElmoImportJob {
 		}
 	}
 
-	// TODO Implement!
 	private void saveImportedData(ElmoImportData importedData) {
 		String fileName = importedData.getFilename();
-
 	}
 
 	private ElmoImportData retrieveFeed(long i) {
-		String data = retrieveFeedFromREST(i);
-		return parseOutElmoImportData(data);
+		List<Disclosure> disclosures = retrieveFeedFromREST(i);
+
+		for (Disclosure disclosure : disclosures) {
+			if (disclosure.getKey().equals("ELM")) {
+				return parseOutElmoImportData((String) disclosure.getValue());
+			}
+			logger.info("Found disclosure key: " + disclosure.getKey());
+		}
+		logger.info("No disclosure with key elm found");
+
+		return null;
+	}
+
+	private PaginatedVerificationRecordsReply callREST(PaginatedVerificationRecordsRequest request) {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "application/json");
+		HttpEntity<PaginatedVerificationRecordsRequest> entity = new HttpEntity<>(request, headers);
+		String url="https://vc-interop-3.sunet.se:444/vp-datastore/verification-records";
+		ResponseEntity<PaginatedVerificationRecordsReply> responseEntity = restTemplate.exchange(
+				url, HttpMethod.POST, entity, PaginatedVerificationRecordsReply.class);
+
+		return responseEntity.getBody();
 	}
 
 	private long retrieveCurrentIdFromFeed() {
-		String data = retrieveFeedFromREST(1);
-		return parseOutLastFeedId(data);
+		PaginatedVerificationRecordsRequest request = new PaginatedVerificationRecordsRequest();
+		request.setRequestedSequenceStart(1);
+		request.setRequestedSequenceEnd(1);
+		PaginatedVerificationRecordsReply reply = callREST(request);
+
+		if (reply != null) {
+			return reply.getSequenceMax();
+		} else {
+			return -1;
+		}
 	}
 
 	// TODO Implement!
@@ -62,13 +99,18 @@ public class ElmoImportJob {
 		return null;
 	}
 
-	// TODO Implement!
-	private String retrieveFeedFromREST(long i) {
-		return null;
-	}
+	// Only pick first vp_result and first vc_result
+	private List<Disclosure> retrieveFeedFromREST(long i) {
 
-	// TODO Implement!
-	private long parseOutLastFeedId(String data) {
-		return 0;
+		PaginatedVerificationRecordsRequest request = new PaginatedVerificationRecordsRequest();
+		request.setRequestedSequenceStart(i);
+		request.setRequestedSequenceEnd(i);
+		PaginatedVerificationRecordsReply reply = callREST(request);
+
+		if (reply != null) {
+			return reply.getItems().get(0).getVpResults().get(0).getVcResults().get(0).getValidSelectiveDisclosures();
+		}
+
+		return null;
 	}
 }

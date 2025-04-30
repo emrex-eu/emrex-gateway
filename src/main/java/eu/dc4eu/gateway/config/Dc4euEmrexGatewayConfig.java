@@ -21,10 +21,12 @@ public class Dc4euEmrexGatewayConfig {
 	}
 
 	/**
-	 * This method is currently scheduled to run every 20 seconds after an initial delay of 15 seconds.
+	 * This method is currently scheduled to run every 20 seconds after an initial delay of 40 seconds
+	 * (so that the converter have time to read its cache).
+	 *
 	 * It imports Elmo files from the wallet.
 	 */
-	@Scheduled(initialDelay = 15000, fixedDelay = 20000)
+	@Scheduled(initialDelay = 40000, fixedDelay = 20000)
 	public void importElmoFromWallet() {
 		elmoImportJob.importElmoFiles();
 	}
