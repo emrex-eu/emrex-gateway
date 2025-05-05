@@ -1,9 +1,13 @@
 package eu.dc4eu.gateway.config;
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import eu.dc4eu.gateway.controllers.MyWebSocketHandler;
 import eu.dc4eu.gateway.elmo.ElmoImportJob;
 import jakarta.inject.Inject;
 
@@ -13,6 +17,7 @@ public class Dc4euEmrexGatewayConfig {
 
 	@Inject
 	private ElmoImportJob elmoImportJob;
+
 
 	// TODO: remove?
 	@Scheduled(initialDelay = 15000, fixedDelay = 600000)
@@ -26,8 +31,9 @@ public class Dc4euEmrexGatewayConfig {
 	 *
 	 * It imports Elmo files from the wallet.
 	 */
-	@Scheduled(initialDelay = 40000, fixedDelay = 20000)
-	public void importElmoFromWallet() {
+	@Scheduled(initialDelay = 60000, fixedDelay = 20000)
+	public void importElmoFromWallet() throws IOException {
+
 		elmoImportJob.importElmoFiles();
 	}
 

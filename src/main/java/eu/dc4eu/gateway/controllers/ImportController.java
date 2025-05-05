@@ -43,12 +43,8 @@ public class ImportController {
 
 		List<ElmoImportData> elmoList = elmoImportRW.importFromDir();
 
-		if (elmoList.isEmpty()) {
-			logger.warn("No files found in directory");
-			model.addAttribute("error", "No files found in directory");
-			return "error";
-		}
 		logger.warn("Got elmoList size=" + elmoList.size());
+
 
 		model.addAttribute("elmos", elmoList);
 
