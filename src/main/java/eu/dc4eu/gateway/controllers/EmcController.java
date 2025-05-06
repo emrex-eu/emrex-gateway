@@ -17,6 +17,7 @@ import eu.dc4eu.gateway.elm.OrganisationDTO;
 import eu.dc4eu.gateway.elmo.CertificateHelper;
 import eu.dc4eu.gateway.emreg.AcronymRepresentation;
 import eu.dc4eu.gateway.issuer.Apiv1NotificationReply;
+import eu.dc4eu.gateway.model.CredentialOfferReply;
 import eu.dc4eu.gateway.service.IssuerService;
 import eu.dc4eu.gateway.service.SessionHelper;
 import org.slf4j.Logger;
@@ -105,7 +106,25 @@ public class EmcController {
 		model.addAttribute("qr_code", notification.getData().getQrBase64());
 		model.addAttribute("qr_url", notification.getData().getCredentialOfferUrl());
 
+		String[] credentialOfferIdVec = notification.getData().getCredentialOfferUrl().split("%2F");
+		String credentialOfferId = credentialOfferIdVec[credentialOfferIdVec.length-1];
+		String credentialOfferReply = issuerService.getCredentialOffer(credentialOfferId);
+
+		logger.warn("Got wallet url: " + credentialOfferReply);
+
+		String walletURL = buildUrlForWebWallets(credentialOfferReply);
+
+		logger.warn("Got wallet url: " + walletURL);
+
+		model.addAttribute("demo_wallet_url", "https://demo.wwwallet.org/"+walletURL);
+
+		model.addAttribute("dc4eu_wallet_url", "https://dc4eu.wwwallet.org/"+walletURL);
+
 		return "success";
+	}
+
+	private String buildUrlForWebWallets(String credentialOfferReply) {
+		return "cb?credential_offer"+credentialOfferReply;
 	}
 
 	private String getPersonId(Elmo elmoparsed) {

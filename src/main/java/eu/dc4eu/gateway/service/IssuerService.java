@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.dc4eu.gateway.issuer.Apiv1NotificationReply;
 import eu.dc4eu.gateway.issuer.Apiv1NotificationRequest;
 import eu.dc4eu.gateway.issuer.Apiv1UploadRequest;
+import eu.dc4eu.gateway.model.CredentialOfferReply;
 import lombok.Getter;
 
 
@@ -120,6 +121,37 @@ public class IssuerService {
 				issuerURL+"/notification", HttpMethod.POST, entity, Apiv1NotificationReply.class);
 
 		return responseEntity.getBody();
+	}
+
+	/**
+	 * {"credential_issuer":"https://vc-interop-3.sunet.se",
+	 * "credential_configuration_ids":[""],
+	 * "grants":{"authorization_code":{"issuer_state":"collect_id=586a42ad-4e19-4148-ada3-1ccb0d1820f9\u0026document_type=ELM\u0026authentic_source=LADOK"}}}
+	 * @param credentialOfferId
+	 * @return
+	 */
+	public String getCredentialOffer(String credentialOfferId) {
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "application/json");
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+
+		ResponseEntity<CredentialOfferReply> responseEntity = restTemplate.exchange(
+				"https://vc-interop-3.sunet.se/credential-offer/"+credentialOfferId, HttpMethod.GET, entity, CredentialOfferReply.class);
+
+
+		String jsonString = null;
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			jsonString = objectMapper.writeValueAsString(responseEntity.getBody());
+		} catch (Exception e) {
+			logger.error("Error converting response body to JSON string", e);
+		}
+
+
+
+		return jsonString;
 	}
 
 

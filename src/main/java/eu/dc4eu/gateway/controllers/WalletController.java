@@ -1,6 +1,8 @@
 package eu.dc4eu.gateway.controllers;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,6 +20,9 @@ import eu.dc4eu.gateway.model.QRRequest;
 @Controller
 @RequestMapping("/vc")
 public class WalletController {
+
+	Logger logger = LoggerFactory.getLogger(WalletController.class);
+
 
 	private final StringHttpMessageConverter stringHttpMessageConverter;
 
@@ -56,6 +61,7 @@ public class WalletController {
 		ResponseEntity<QRReply> responseEntity = restTemplate.exchange(
 				url, HttpMethod.POST, entity, QRReply.class);
 
+		logger.warn("responseEntity={}", responseEntity.toString());
 		QRReply qrReply = responseEntity.getBody();
 
 		if (qrReply != null) {
