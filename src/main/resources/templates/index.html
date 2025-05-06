@@ -2,8 +2,6 @@
 <html lang="en">
 <div th:replace="~{head :: head}"></div>
 <body>
-
-
 <!-- Sticky Navbar -->
 <div th:replace="~{nav :: navbar}"></div>
 
@@ -13,7 +11,7 @@
 		<div class="col-md-6">
 			<div class="card">
 				<div class="card-body">
-					<h5 class="card-title">Add credential from via Emrex to wallet </h5>
+					<h5 class="card-title">Add credential  to wallet via Emrex</h5>
 <!--					<p class="card-text">Click button to add credential to wallet</p>-->
 					<a href="/emrex/ewps" class="btn btn-primary">Add to wallet</a>
 				</div>
@@ -25,6 +23,7 @@
 					<h5 class="card-title">Get credential from wallet</h5>
 <!--					<p class="card-text">Click button to get credential from wallet</p>-->
 					<a href="/vc/wallet" class="btn btn-primary">Get from wallet</a>
+					<a href="/import/readDir" class="btn btn-secondary">Show credentials</a>
 				</div>
 			</div>
 		</div>

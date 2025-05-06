@@ -41,14 +41,24 @@ public class ImportController {
 	public String onReturn(Model model) throws IOException {
 		logger.info("Reading directory...");
 
-		List<ElmoImportData> elmoList = elmoImportRW.importFromDir();
-
-		logger.warn("Got elmoList size=" + elmoList.size());
-
-
-		model.addAttribute("elmos", elmoList);
+//		List<ElmoImportData> elmoList = elmoImportRW.importFromDir();
+//
+//		logger.warn("Got elmoList size=" + elmoList.size());
+//
+//
+//		model.addAttribute("elmos", elmoList);
 
 		return "import_directory";
+	}
+
+	@GetMapping(value = "/readDirFragment")
+	public String getTableFragment(Model model) throws IOException {
+		logger.info("Fetching table fragment...");
+
+		List<ElmoImportData> elmoList = elmoImportRW.importFromDir();
+		model.addAttribute("elmos", elmoList);
+
+		return "fragments/elmo_table :: tableRows";
 	}
 
 	@GetMapping(value="/download/{id}")
@@ -71,3 +81,4 @@ public class ImportController {
 							 .body(new InputStreamResource(Files.newInputStream(file.toPath())));
 	}
 }
+

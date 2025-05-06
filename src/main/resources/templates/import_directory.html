@@ -1,77 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+<div th:replace="~{head :: head}"></div>
 <head>
-	<meta charset="UTF-8">
-	<title th:text="${title}">Title</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-		  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-	<link rel="icon" href="https://emrex.eu/wp-content/uploads/2019/05/cropped-favicon-32x32.png" sizes="32x32">
-	<style>
-        body, html {
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .wrapper {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            margin: 0;
         }
-        main {
+        .content {
             flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        .rows:after {
-            content: "";
-            display: table;
-            clear: both;
+        footer {
+            position: sticky;
+            bottom: 0;
+            background-color: #f8f9fa;
         }
-        .cols {
-            float: left;
-            padding: 10px;
-            border: 1px solid #ccc;
-            width: 25%;
-        }
-	</style>
+    </style>
 </head>
 <body>
-
-<!-- Sticky Navbar -->
-<div th:replace="~{nav :: navbar}"></div>
-
-<div>
-		<div class="rows" th:each="row : ${elmos}">
-			<div class="cols">
-				<p class="card-text">
-			    	<span th:text="${row.Id}">Id</span>
-		    	</p>
-			</div>
-			<div class="cols">
-				<p class="card-text">
-					<span th:text="${row.Timestamp}">Timestamp</span>
-				</p>
-			</div>
-			<div class="cols">
-				<p class="card-text">
-					<span th:text="${row.Name}">Name</span>
-				</p>
-			</div>
-			<div class="cols">
-				<p class="card-text">
-					<a th:href="@{|/import/download/${row.Id}|}"><span>Elmo</span></a>
-				</p>
-			</div>
-		</div>
+<div class="wrapper">
+    <!-- Sticky Navbar -->
+    <div th:replace="~{nav :: navbar}"></div>
+    <div class="content container mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">TIMESTAMP</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">DOWNLOAD</th>
+                </tr>
+            </thead>
+            <tbody id="elmo-table-body">
+                <tr th:each="row : ${elmos}">
+                    <td th:text="${row.Id}">Id</td>
+                    <td th:text="${row.Timestamp}">Timestamp</td>
+                    <td th:text="${row.Name}">Name</td>
+                    <td><a th:href="@{|/import/download/${row.Id}|}"><span>Elmo</span></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Footer -->
+    <footer th:replace="~{footer :: footer}"></footer>
 </div>
 
-<!-- Footer -->
-<div th:replace="~{footer :: footer}"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-6oZVynJlq0tWDbzg2czj3SUOHp2kE2yc2kGJ5eZnf4tzF3LVO1vFt0RypRjBaw9M"
-		crossorigin="anonymous"></script>
+        integrity="sha384-6oZVynJlq0tWDbzg2czj3SUOHp2kE2yc2kGJ5eZnf4tzF3LVO1vFt0RypRjBaw9M"
+        crossorigin="anonymous"></script>
 <script>
-    setInterval(() => {
-        location.reload();
-    }, 5000);
+    async function updateTable() {
+        try {
+            const response = await fetch('/import/readDirFragment');
+            if (response.ok) {
+                const html = await response.text();
+                document.getElementById('elmo-table-body').innerHTML = html;
+            } else {
+                console.error('Failed to fetch table data:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating table:', error);
+        }
+    }
+
+    setInterval(updateTable, 5000);
 </script>
 </body>
 </html>

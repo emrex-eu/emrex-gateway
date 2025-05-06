@@ -1,20 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <div th:replace="~{head:: head}"></div>
-
-
-<script>
-    const socket = new WebSocket("ws://localhost:8080/ws/updates");
-
-    socket.onmessage = function (event) {
-        const updatesDiv = document.getElementById("updates");
-        const newItem = document.createElement("div");
-        newItem.textContent = event.data;
-        updatesDiv.appendChild(newItem);
-    };
-</script>
 <body>
 <div th:replace="~{nav :: navbar}"></div>
 
@@ -22,26 +8,20 @@
 	<div class="text-center">
 		<div th:if="${qr_code != null}">
 			<img th:src="${'data:image/png;base64,' + qr_code}" alt="" height="400" width="400" class="mb-3">
-<!--			<p>-->
-<!--				<a th:href="@{${qr_url}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Get from Wallet</a>-->
-<!--			</p>-->
 			<p>
-				<a th:href="@{${dc4euWWWalletURL}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Open in DC4euwallet</a>
+				<a th:href="@{${dc4euWWWalletURL}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Open in
+					DC4euwallet</a>
 			</p>
 			<p>
-				<a th:href="@{${openInDemoWWWalletButton}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Open in demo wwWallet</a>
+				<a th:href="@{${openInDemoWWWalletButton}}" class="btn btn-primary d-block mx-auto" style="width: 400px;">Open in demo
+					wwWallet</a>
 			</p>
 			<p>
-				<a href="/import/readDir" class="btn btn-primary">Show incoming credentials</a>
+				<a href="/import/readDir" class="btn btn-primary" style="width: 400px;">Show incoming credentials</a>
 			</p>
-		</div>
-	</div>
-	<div>
-		<h2>Updates</h2>
-		<div id="updates" class="updates">
-			<!-- WebSocket updates will be appended here -->
 		</div>
 	</div>
 </main>
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

@@ -2,12 +2,10 @@ package eu.dc4eu.gateway.config;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import eu.dc4eu.gateway.controllers.MyWebSocketHandler;
 import eu.dc4eu.gateway.elmo.ElmoImportJob;
 import jakarta.inject.Inject;
 

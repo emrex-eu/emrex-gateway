@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <th:block th:fragment="tableRows">
+        <tr th:each="row : ${elmos}">
+            <td th:text="${row.Id}">Id</td>
+            <td th:text="${row.Timestamp}">Timestamp</td>
+            <td th:text="${row.Name}">Name</td>
+            <td><a th:href="@{|/import/download/${row.Id}|}"><span>Elmo</span></a></td>
+        </tr>
+    </th:block>
+</body>
+</html>
