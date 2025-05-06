@@ -47,8 +47,7 @@ public class IssuerService {
 			        "family_name": "Herzog",
 			        "given_name": "Sanford",
 			        "schema": {
-			          "name": "SE",
-			          "version": "1.0.0"
+			          "name": "DefaultSchema"
 			        }
 			      }
 			    ],
@@ -65,13 +64,8 @@ public class IssuerService {
 			      "document_version": "1.0.0",
 			      "real_data": false,
 			      "revocation": {
-			        "id": "e6b6e99d-921b-4b17-88c5-f1ab5f937dba",
-			        "reference": {
-			          "authentic_source": "LADOK",
-			          "document_id": "$document_id$",
-			          "document_type": "ELM"
-			        }
-			      }
+			      			"reference": {}
+			      }			    
 			    }
 			}
 			""";
@@ -100,6 +94,7 @@ public class IssuerService {
 		headers.set("Content-Type", "application/json");
 
 
+		logger.warn("issuerURL={}", issuerURL);
 
 		HttpEntity<Apiv1UploadRequest> entity = new HttpEntity<>(request, headers);
 
@@ -139,6 +134,8 @@ public class IssuerService {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
+
+		logger.warn("Request payload: {}", request.toString());
 
 		return request;
 	}

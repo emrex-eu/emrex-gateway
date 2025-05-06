@@ -97,13 +97,13 @@ public class EmcController {
 		// TODO: currently returning to "index"
 		Apiv1NotificationReply notification = issuerService.notification(document_id);
 
-		notification.getData().getBase64Image();
-		logger.warn("Got deeplink: " + notification.getData().getCredentialOffer());
+		notification.getData().getQrBase64();
+		logger.warn("Got deeplink: " + notification.getData().getCredentialOfferUrl());
 
 		model.addAttribute("title", "Emrex Gateway");
 		model.addAttribute("emps",new EmregRepresentation());
-		model.addAttribute("qr_code", notification.getData().getBase64Image());
-		model.addAttribute("qr_url", notification.getData().getCredentialOffer());
+		model.addAttribute("qr_code", notification.getData().getQrBase64());
+		model.addAttribute("qr_url", notification.getData().getCredentialOfferUrl());
 
 		return "success";
 	}

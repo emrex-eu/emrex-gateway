@@ -73,12 +73,12 @@ public class ElmoUploadController {
 			logger.warn("Issuer response:" + issuerResponse);
 			Apiv1NotificationReply notification = issuerService.notification(document_id);
 
-			logger.warn("Got deeplink: " + notification.getData().getCredentialOffer());
+			logger.warn("Got deeplink: " + notification.getData().getCredentialOfferUrl());
 
 			model.addAttribute("title", "Emrex Gateway");
 			model.addAttribute("emps", new EmregRepresentation());
-			model.addAttribute("qr_code", notification.getData().getBase64Image());
-			model.addAttribute("qr_url", notification.getData().getCredentialOffer());
+			model.addAttribute("qr_code", notification.getData().getQrBase64());
+			model.addAttribute("qr_url", notification.getData().getCredentialOfferUrl());
 
 			return "success";
 

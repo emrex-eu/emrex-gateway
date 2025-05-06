@@ -90,7 +90,7 @@ public class ElmoImportJob {
 		List<Disclosure> disclosures = new ArrayList<>();
 		if (FAKE_ELM) {
 			Disclosure disclosure = new Disclosure();
-			disclosure.setKey("ELM");
+			disclosure.setKey("elm");
 
 			logger.info("Converting sample Elmo to ELM");
 			ClassPathResource resource = new ClassPathResource("sampleElmo.b64");
@@ -113,7 +113,7 @@ public class ElmoImportJob {
 		}
 
 		for (Disclosure disclosure : disclosures) {
-			if (disclosure.getKey().equals("ELM")) {
+			if (disclosure.getKey().equals("elm")) {
 				logger.info("Found ELM key - converting to elmo");
 				return parseOutElmoImportData((String) disclosure.getValue(), i);
 			}
