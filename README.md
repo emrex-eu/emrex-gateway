@@ -23,9 +23,9 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-or using docker-compose (recommended):
+or using docker compose (recommended):
 
-You can start the application by running the following command: just set reguired environment variables in the docker-compose.yml if the default values are not suitable for you.
+You can start the application by running the following command: just set required environment variables in the docker-compose.yml if the default values are not suitable for you.
 ```
 docker compose up --build
 ```
