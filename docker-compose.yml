@@ -3,9 +3,6 @@ services:
     build:
       context: .
     environment:
-      #DC4EU_ISSUER_URL: https://vc-interop-3.sunet.se
-      dc4eu.converter.url: http://converter:8080/rest/request
-      dc4eu.return.url: http://localhost:8080
       _JAVA_OPTIONS: >
         -Xdebug
         -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
