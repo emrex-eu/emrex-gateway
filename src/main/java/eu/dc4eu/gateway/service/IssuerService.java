@@ -26,6 +26,8 @@ public class IssuerService {
 
 	Logger logger = LoggerFactory.getLogger(IssuerService.class);
 
+	public static final String API_PART="/api/v1";
+
 	String issuerRequestMock= """
 			{
 
@@ -94,13 +96,10 @@ public class IssuerService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
 
-
-		logger.warn("issuerURL={}", issuerURL);
-
 		HttpEntity<Apiv1UploadRequest> entity = new HttpEntity<>(request, headers);
 
 		ResponseEntity<String> responseEntity = restTemplate.exchange(
-				issuerURL+"/upload", HttpMethod.POST, entity, String.class);
+				issuerURL+API_PART+"/upload", HttpMethod.POST, entity, String.class);
 
 		return responseEntity.getBody();
 	}
@@ -118,7 +117,7 @@ public class IssuerService {
 		HttpEntity<Apiv1NotificationRequest> entity = new HttpEntity<>(request, headers);
 
 		ResponseEntity<Apiv1NotificationReply> responseEntity = restTemplate.exchange(
-				issuerURL+"/notification", HttpMethod.POST, entity, Apiv1NotificationReply.class);
+				issuerURL+API_PART+"/notification", HttpMethod.POST, entity, Apiv1NotificationReply.class);
 
 		return responseEntity.getBody();
 	}
@@ -138,7 +137,7 @@ public class IssuerService {
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
 		ResponseEntity<CredentialOfferReply> responseEntity = restTemplate.exchange(
-				"https://vc-interop-3.sunet.se/credential-offer/"+credentialOfferId, HttpMethod.GET, entity, CredentialOfferReply.class);
+				issuerURL+"/credential-offer/"+credentialOfferId, HttpMethod.GET, entity, CredentialOfferReply.class);
 
 
 		String jsonString = null;

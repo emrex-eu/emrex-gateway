@@ -80,13 +80,13 @@ public class EmcController {
 
 		Response response = converterService.convertElmoToElm(new String(elmo64));
 
-		logger.warn("Response: {}", response);
+		//logger.warn("Response: {}", response);
 
 		String elmAsBase64 = response.getContent();
 
 		byte[] data = Base64.getDecoder().decode(elmAsBase64.getBytes(StandardCharsets.UTF_8));
 
-		logger.warn("ELM: {}", new String(data));
+		//logger.warn("ELM: {}", new String(data));
 
 		String person_id=getPersonId(elmoparsed);
 		String document_id= UUID.randomUUID().toString();

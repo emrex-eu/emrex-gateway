@@ -3,6 +3,7 @@ package eu.dc4eu.gateway.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,9 @@ import eu.dc4eu.gateway.model.QRRequest;
 @Controller
 @RequestMapping("/vc")
 public class WalletController {
+
+	@Value("${dc4eu.issuer.url}")
+	private String issuerURL;
 
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 
@@ -57,7 +61,7 @@ public class WalletController {
 		qrRequest.setDocumentType("EHIC");
 		HttpEntity<QRRequest> entity = new HttpEntity<>(qrRequest, headers);
 
-		String url = "https://vc-interop-3.sunet.se:444/qr-code";
+		String url = issuerURL+":444/qr-code";
 		ResponseEntity<QRReply> responseEntity = restTemplate.exchange(
 				url, HttpMethod.POST, entity, QRReply.class);
 

@@ -1,8 +1,6 @@
 # Emrex-gateway
 
-Gateway between Emrex and DC4EU wallet. This will let you export transcript of records from your Emrex-connected university into a digital wallet. 
-
-We are also planning on exporting transcript of records from a wallet to a Emrex-connected university
+Gateway between Emrex and a wallet. This will let you export credentials from your Emrex-connected university into a digital wallet and vice versa using the ELM format. 
 
 ## Other projects this project depends on
 
@@ -25,13 +23,41 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-or using docker-compose:
+or using docker-compose (recommended):
 
 You can start the application by running the following command: just set reguired environment variables in the docker-compose.yml if the default values are not suitable for you.
 ```
-docker-compose up --build
+docker compose up --build
 ```
 
 Then you can access the application on http://localhost:8080
 
+## Using the application
 
+The application consists of three main parts:
+- "Add to wallet" - lets you add credentials to your wallet
+- "Export from wallet" - lets you export credentials from your wallet
+- "Show incoming credentials" - shows the latest incoming credentials exported from wallets
+
+### Add to wallet
+
+Select the country and the university you want to add the credential from. 
+The application will then generate a QR code that you can scan with your wallet app. 
+The QR code contains a link to the credential in the Emrex system.
+
+For debug purposes you can also upload an elmo file directly (the signature will not be validated in this case) 
+
+### Export from wallet
+
+A QR code will be generated that you can scan with your wallet app. 
+Select the ELM data from the wallet that you want to export
+
+### Show incoming credentials
+
+The latest incoming credentials will be displayed in a table (most recent on top). 
+You can also download the elmo file for each credential.
+
+## Configuration
+
+
+- The directory imported_elmos is used to store the elmo files that are imported from wallets.

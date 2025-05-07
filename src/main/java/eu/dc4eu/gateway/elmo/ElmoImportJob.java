@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,9 @@ public class ElmoImportJob {
 	private static final Logger logger = LoggerFactory.getLogger(ElmoImportJob.class);
 	private static long currentMaxIndex = -1;
 	private static final boolean FAKE_ELM=true; // TODO: Remove this when real ELM keys are avail
+
+	@Value("${dc4eu.issuer.url}")
+	private String issuerURL;
 
 	@Inject
 	ElmoImportRW elmoImportRW;
@@ -129,8 +133,8 @@ public class ElmoImportJob {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
 		HttpEntity<PaginatedVerificationRecordsRequest> entity = new HttpEntity<>(request, headers);
-		// TODO: hardcoded URL
-		String url="https://vc-interop-3.sunet.se:444/vp-datastore/verification-records";
+
+		String url=issuerURL+":444/vp-datastore/verification-records";
 		ResponseEntity<PaginatedVerificationRecordsReply> responseEntity = restTemplate.exchange(
 				url, HttpMethod.POST, entity, PaginatedVerificationRecordsReply.class);
 
