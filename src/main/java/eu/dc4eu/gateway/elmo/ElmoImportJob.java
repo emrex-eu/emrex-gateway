@@ -186,8 +186,15 @@ public class ElmoImportJob {
 		PaginatedVerificationRecordsReply reply = callREST(request);
 
 		if (reply != null) {
-			return reply.getItems().get(0).getVpResults().get(0).getVcResults().get(0).getValidSelectiveDisclosures();
+			if (reply.getItems().get(0).getVerificationMeta().getVerificationResult().equals("verified")) {
+				return reply.getItems().get(0).getVpResults().get(0).getVcResults().get(0).getValidSelectiveDisclosures();
+			} else {
+				logger.warn("Only pick verified results");
+				return null;
+			}
 		}
+
+		logger.warn("Error retrieving feed from REST");
 
 		return null;
 	}

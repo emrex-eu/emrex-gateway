@@ -1095,7 +1095,7 @@
                     "$ref": "#/definitions/model.MetaData"
                 },
                 "qr": {
-                    "$ref": "#/definitions/model.QR"
+                    "$ref": "#/definitions/openid4vci.QR"
                 }
             }
         },
@@ -1110,67 +1110,127 @@
         "model.Identity": {
             "type": "object",
             "required": [
+                "birth_date",
+                "family_name",
+                "given_name",
                 "schema"
             ],
             "properties": {
+                "age_birth_year": {
+                    "type": "integer"
+                },
+                "age_in_years": {
+                    "type": "integer"
+                },
+                "age_over_14": {
+                    "type": "string"
+                },
+                "age_over_16": {
+                    "type": "boolean"
+                },
+                "age_over_18": {
+                    "type": "boolean"
+                },
+                "age_over_21": {
+                    "type": "boolean"
+                },
+                "age_over_65": {
+                    "type": "boolean"
+                },
                 "authentic_source_person_id": {
                     "description": "required: true\nexample: 65636cbc-c03f-11ee-8dc4-67135cc9bd8a",
                     "type": "string"
                 },
-                "birth_city": {
-                    "description": "required: false\nexample: Stockholm",
-                    "type": "string"
-                },
-                "birth_country": {
-                    "description": "TODO(masv): full name or just country code?\nrequired: false\nexample: sweden",
-                    "type": "string"
-                },
                 "birth_date": {
-                    "description": "required: true\nexample: 1970-01-01",
+                    "description": "required: true\nexample: 1970-01-01 TODO: Day, month, and year?",
                     "type": "string"
+                },
+                "birth_family_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "birth_given_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
                 },
                 "birth_place": {
-                    "description": "required: false\nexample: Stockholm",
+                    "description": "required: true\nexample: Stockholm",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "document_number": {
+                    "description": "required: false\nexample:",
                     "type": "string"
                 },
-                "birth_state": {
-                    "description": "required: false\nexample: Stockholm",
+                "email_address": {
+                    "description": "required: false\nexample: \u003cemail-address\u003e",
+                    "type": "string"
+                },
+                "expiry_date": {
+                    "description": "required: true\nexample: Date (and if possible time)",
                     "type": "string"
                 },
                 "family_name": {
                     "description": "required: true\nexample: Svensson",
-                    "type": "string"
-                },
-                "family_name_at_birth": {
-                    "description": "required: false\nexample: Karlsson",
-                    "type": "string"
-                },
-                "gender": {
-                    "description": "required: false\nexample: male",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
                 },
                 "given_name": {
                     "description": "required: true\nexample: Magnus",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "issuance_date": {
                     "type": "string"
                 },
-                "given_name_at_birth": {
-                    "description": "required: false\nexample: Magnus",
+                "issuing_authority": {
+                    "description": "required: true\nexample:",
+                    "type": "string"
+                },
+                "issuing_country": {
+                    "description": "required: true\nexample:",
+                    "type": "string"
+                },
+                "issuing_jurisdiction": {
+                    "description": "required: false\nexample:",
+                    "type": "string"
+                },
+                "mobile_phone_number": {
+                    "description": "required: false\nexample: \u003c+mobile-phone-number\u003e",
                     "type": "string"
                 },
                 "nationality": {
-                    "description": "required: false\nexample: swedish",
+                    "description": "required: true\nexample: SE",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "personal_administrative_number": {
+                    "description": "required: false\nexample: \u003cpersonnummer\u003e",
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 4
+                },
+                "picture": {
+                    "description": "required: false\nexample: facial image compliant with ISO 19794-5 or ISO 39794 specifications",
                     "type": "string"
                 },
                 "resident_address": {
-                    "description": "required: false\nexample: 221b baker street",
+                    "description": "required: false\nexample: 221b Baker street",
                     "type": "string"
                 },
                 "resident_city": {
-                    "description": "required: false\nexample: london",
+                    "description": "required: false\nexample: London",
                     "type": "string"
                 },
                 "resident_country": {
-                    "description": "required: false\nexample: england",
+                    "description": "required: false\nexample: England",
                     "type": "string"
                 },
                 "resident_house_number": {
@@ -1185,12 +1245,33 @@
                     "description": "required: false\nexample: england",
                     "type": "string"
                 },
-                "resident_street": {
-                    "description": "required: false\nexample: baker street",
-                    "type": "string"
+                "resident_street_address": {
+                    "description": "required: false\nexample: Baker street",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
                 },
                 "schema": {
                     "$ref": "#/definitions/model.IdentitySchema"
+                },
+                "sex": {
+                    "description": "required: false\nexample: 0 = not known, 1 = male, 2 = female, ...",
+                    "type": "string",
+                    "enum": [
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9"
+                    ]
+                },
+                "trust_anchor": {
+                    "type": "string"
                 }
             }
         },
@@ -1246,12 +1327,12 @@
                     "description": "required: true\nexample: PDA1",
                     "type": "string",
                     "enum": [
-                        "PDA1",
-                        "EHIC",
-                        "ELM",
-                        "Diploma",
-                        "MicroCredential",
-                        "PID"
+                        "urn:edui:elm:1",
+                        "urn:edui:diploma:1",
+                        "urn:edui:micro_credential:1",
+                        "urn:eu.europa.ec.eudi:pid:1",
+                        "urn:eudi:ehic:1",
+                        "urn:eudi:pda1:1"
                     ]
                 },
                 "document_version": {
@@ -1269,22 +1350,6 @@
                             "$ref": "#/definitions/model.Revocation"
                         }
                     ]
-                }
-            }
-        },
-        "model.QR": {
-            "type": "object",
-            "required": [
-                "base64_image"
-            ],
-            "properties": {
-                "base64_image": {
-                    "description": "required: true\nexample: \"ZWFzdGVyIGVnZyE=\"",
-                    "type": "string"
-                },
-                "credential_offer": {
-                    "description": "required: true",
-                    "type": "string"
                 }
             }
         },

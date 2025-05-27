@@ -166,7 +166,11 @@ public class IssuerService {
 			e.printStackTrace();
 		}
 
-		logger.warn("Request payload: {}", request.toString());
+		try {
+			logger.warn("Request payload: {}", objectMapper.writeValueAsString(request));
+		} catch (JsonProcessingException e) {
+			logger.error("Error converting request to JSON string", e);
+		}
 
 		return request;
 	}
