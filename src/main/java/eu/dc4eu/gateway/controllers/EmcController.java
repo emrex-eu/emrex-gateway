@@ -2,10 +2,13 @@ package eu.dc4eu.gateway.controllers;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.UUID;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -89,11 +92,15 @@ public class EmcController {
 		//logger.warn("ELM: {}", new String(data));
 
 		String person_id=getPersonId(elmoparsed);
+		String given_name=getGivenName(elmoparsed);
+		String family_name=getFamilyName(elmoparsed);
+		String birth_date=getBirthDate(elmoparsed);
+
 		String document_id= UUID.randomUUID().toString();
 		String collect_id= UUID.randomUUID().toString();
 		elmAsBase64 = addMissingProperties(data, document_id);  // add missing properties to elm to make it validate
 
-		String issuerResponse = issuerService.upload(document_id, person_id, collect_id, elmAsBase64);
+		String issuerResponse = issuerService.upload(document_id, person_id, collect_id, given_name, family_name, birth_date, elmAsBase64);
 		logger.warn("Issuer response:"+issuerResponse);
 		// TODO: currently returning to "index"
 		Apiv1NotificationReply notification = issuerService.notification(document_id);
@@ -121,6 +128,29 @@ public class EmcController {
 		model.addAttribute("dc4eu_wallet_url", "https://dc4eu.wwwallet.org/"+walletURL);
 
 		return "success";
+	}
+
+	private String getBirthDate(Elmo elmoparsed) {
+		if (elmoparsed.getLearner() != null && elmoparsed.getLearner().getBday() != null) {
+			XMLGregorianCalendar bday = elmoparsed.getLearner().getBday();
+			LocalDateTime localDateTime = bday.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
+			return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+		}
+		return "";
+	}
+
+	private String getGivenName(Elmo elmoparsed) {
+		if (elmoparsed.getLearner() != null && elmoparsed.getLearner().getGivenNames() != null) {
+			return elmoparsed.getLearner().getGivenNames();
+		}
+		return "";
+	}
+
+	private String getFamilyName(Elmo elmoparsed) {
+		if (elmoparsed.getLearner() != null && elmoparsed.getLearner().getFamilyName() != null) {
+			return elmoparsed.getLearner().getFamilyName();
+		}
+		return "";
 	}
 
 	private String buildUrlForWebWallets(String credentialOfferReply) {

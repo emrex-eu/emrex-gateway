@@ -1,9 +1,13 @@
 package eu.dc4eu.gateway.controllers;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.regex.Pattern;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +73,11 @@ public class ElmoUploadController {
 			String document_id = UUID.randomUUID().toString();
 			String collect_id = UUID.randomUUID().toString();
 
-			String issuerResponse = issuerService.upload(document_id, person_id, collect_id, elmAsBase64);
+			String given_name = getGivenName(elmoparsed);
+			String family_name = getFamilyName(elmoparsed);
+			String birth_date = getBirthDate(elmoparsed);
+
+			String issuerResponse = issuerService.upload(document_id, person_id, collect_id, given_name, family_name, birth_date, elmAsBase64);
 			logger.warn("Issuer response:" + issuerResponse);
 			Apiv1NotificationReply notification = issuerService.notification(document_id);
 
@@ -85,6 +93,29 @@ public class ElmoUploadController {
 		} catch (Exception e) {
 			return "error";
 		}
+	}
+
+	private String getBirthDate(Elmo elmoparsed) {
+		if (elmoparsed.getLearner() != null && elmoparsed.getLearner().getBday() != null) {
+			XMLGregorianCalendar bday = elmoparsed.getLearner().getBday();
+			LocalDateTime localDateTime = bday.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
+			return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+		}
+		return "";
+	}
+
+	private String getGivenName(Elmo elmoparsed) {
+		if (elmoparsed.getLearner() != null && elmoparsed.getLearner().getGivenNames() != null) {
+			return elmoparsed.getLearner().getGivenNames();
+		}
+		return "";
+	}
+
+	private String getFamilyName(Elmo elmoparsed) {
+		if (elmoparsed.getLearner() != null && elmoparsed.getLearner().getFamilyName() != null) {
+			return elmoparsed.getLearner().getFamilyName();
+		}
+		return "";
 	}
 
 	private String getPersonId(Elmo elmoparsed) {

@@ -46,9 +46,9 @@ public class IssuerService {
 			    "identities": [
 			      {
 			        "authentic_source_person_id": "$person_id$",
-			        "birth_date": "2009-04-25",
-			        "family_name": "Herzog",
-			        "given_name": "Sanford",
+			        "birth_date": "$birth_date$",
+			        "family_name": "$family_name$",
+			        "given_name": "$given_name$",
 			        "schema": {
 			          "name": "DefaultSchema"
 			        }
@@ -85,11 +85,11 @@ public class IssuerService {
 	@Value("${dc4eu.issuer.url}")
 	private String issuerURL;
 
-	public String upload(String document_id, String person_id, String collect_id, String elm) {
+	public String upload(String document_id, String person_id, String collect_id, String given_name, String family_name, String birth_date, String elm) {
 
 		logger.warn("Issuer URL: {}", issuerURL);
 
-		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id, elm);
+		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id, given_name, family_name, birth_date, elm);
 
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -154,12 +154,15 @@ public class IssuerService {
 	}
 
 
-	public Apiv1UploadRequest convertToRequest(String issuerData, String document_id, String person_id, String collect_id, String elm)  {
+	public Apiv1UploadRequest convertToRequest(String issuerData, String document_id, String person_id, String collect_id, String given_name, String family_name, String birth_date, String elm)  {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Apiv1UploadRequest request = null;
 		try {
 			request = objectMapper.readValue(issuerData.replace("$document_id$", document_id)
 													   .replace("$person_id$",person_id)
+													   .replace("$given_name$", given_name)
+													   .replace("$family_name$", family_name)
+													   .replace("$birth_date$", birth_date)
 													   .replace("$elm_base64$", elm)
 													   .replace("$collect_id$",collect_id), Apiv1UploadRequest.class);
 		} catch (JsonProcessingException e) {
