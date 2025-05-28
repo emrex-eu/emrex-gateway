@@ -77,7 +77,7 @@ public class IssuerService {
 			{
 			  "authentic_source": "LADOK",
 			  "document_id": "$document_id$",
-			  "document_type": "ELM"
+			  "document_type": "urn:edui:elm:1"
 			}
 			 
  """;
