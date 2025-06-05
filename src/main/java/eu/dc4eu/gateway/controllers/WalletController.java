@@ -58,7 +58,7 @@ public class WalletController {
 		headers.set("Content-Type", "application/json");
 		// Create the QRRequest object
 		QRRequest qrRequest = new QRRequest();
-		qrRequest.setDocumentType("EHIC");
+		qrRequest.setPresentationRequestTypeId("VCELM");
 		HttpEntity<QRRequest> entity = new HttpEntity<>(qrRequest, headers);
 
 		String url = issuerURL+":444/qr-code";

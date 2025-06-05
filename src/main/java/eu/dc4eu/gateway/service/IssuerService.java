@@ -63,7 +63,7 @@ public class IssuerService {
 			      "credential_valid_from": -1755784082,
 			      "credential_valid_to": -176812047,
 			      "document_id": "$document_id$",
-			      "document_type": "urn:edui:elm:1",
+			      "document_type": "urn:eudi:elm:1",
 			      "document_version": "1.0.0",
 			      "real_data": false,
 			      "revocation": {
@@ -77,7 +77,7 @@ public class IssuerService {
 			{
 			  "authentic_source": "LADOK",
 			  "document_id": "$document_id$",
-			  "document_type": "urn:edui:elm:1"
+			  "document_type": "urn:eudi:elm:1"
 			}
 			 
  """;
