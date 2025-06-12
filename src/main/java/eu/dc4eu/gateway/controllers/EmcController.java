@@ -113,13 +113,18 @@ public class EmcController {
 		model.addAttribute("qr_code", notification.getData().getQrBase64());
 		model.addAttribute("qr_url", notification.getData().getCredentialOfferUrl());
 
-		String[] credentialOfferIdVec = notification.getData().getCredentialOfferUrl().split("%2F");
-		String credentialOfferId = credentialOfferIdVec[credentialOfferIdVec.length-1];
-		String credentialOfferReply = issuerService.getCredentialOffer(credentialOfferId);
+		String tdata = notification.getData().getCredentialOfferUrl();
 
-		logger.warn("Got wallet url: " + credentialOfferReply);
+		String walletURL = notification.getData().getCredentialOfferUrl().replace("openid-credential-offer://", "");
 
-		String walletURL = buildUrlForWebWallets(credentialOfferReply);
+		//String[] credentialOfferIdVec = notification.getData().getCredentialOfferUrl().split("%2F");
+		//String credentialOfferId = credentialOfferIdVec[credentialOfferIdVec.length-1];
+		//credentialOfferId = credentialOfferId.replace("elm","urn:eudi:elm:1");
+		//String credentialOfferReply = issuerService.getCredentialOffer(credentialOfferId);
+
+		//logger.warn("Got wallet url: " + credentialOfferReply);
+
+		//String walletURL = buildUrlForWebWallets(credentialOfferReply);
 
 		logger.warn("Got wallet url: " + walletURL);
 

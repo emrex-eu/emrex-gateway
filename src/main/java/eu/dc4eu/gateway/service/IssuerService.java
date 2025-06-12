@@ -123,9 +123,6 @@ public class IssuerService {
 	}
 
 	/**
-	 * {"credential_issuer":"https://vc-interop-3.sunet.se",
-	 * "credential_configuration_ids":[""],
-	 * "grants":{"authorization_code":{"issuer_state":"collect_id=586a42ad-4e19-4148-ada3-1ccb0d1820f9\u0026document_type=ELM\u0026authentic_source=LADOK"}}}
 	 * @param credentialOfferId
 	 * @return
 	 */
