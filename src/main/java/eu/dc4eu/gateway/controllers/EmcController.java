@@ -128,7 +128,7 @@ public class EmcController {
 
 		logger.warn("Got wallet url: " + walletURL);
 
-		model.addAttribute("demo_wallet_url", "https://demo.wwwallet.org/"+walletURL);
+		model.addAttribute("demo_wallet_url", "https://wallet.dc4eu.eu/"+walletURL);
 
 		model.addAttribute("dc4eu_wallet_url", "https://dc4eu.wwwallet.org/"+walletURL);
 

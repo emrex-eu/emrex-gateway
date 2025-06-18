@@ -10,7 +10,7 @@ Gateway between Emrex and a wallet. This will let you export credentials from yo
 
 ## We are planning to support at least the wallets below
 
-[wwWallet](https://demo.wwwallet.org/)
+[wwWallet](https://dc4eu.wwwallet.org/)
 
 [dc4eu Wallet](https://wallet.dc4eu.eu/)
 

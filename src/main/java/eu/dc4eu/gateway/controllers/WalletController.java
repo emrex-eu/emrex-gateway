@@ -22,8 +22,8 @@ import eu.dc4eu.gateway.model.QRRequest;
 @RequestMapping("/vc")
 public class WalletController {
 
-	@Value("${dc4eu.issuer.url}")
-	private String issuerURL;
+	@Value("${dc4eu.verifier.url}")
+	private String verifierURL;
 
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 
@@ -61,7 +61,8 @@ public class WalletController {
 		qrRequest.setPresentationRequestTypeId("VCELM");
 		HttpEntity<QRRequest> entity = new HttpEntity<>(qrRequest, headers);
 
-		String url = issuerURL+":444/qr-code";
+		String url = verifierURL+":444/qr-code";
+		logger.info("Requesting QR code from URL: {}", url);
 		ResponseEntity<QRReply> responseEntity = restTemplate.exchange(
 				url, HttpMethod.POST, entity, QRReply.class);
 
@@ -77,7 +78,7 @@ public class WalletController {
 			);
 
 			String openInDemoWWWalletButton =  String.format(
-					"https://demo.wwwallet.org/cb?client_id=%s&request_uri=%s",
+					"https://wallet.dc4eu.eu/cb?client_id=%s&request_uri=%s",
 					qrReply.getClientId(),
 					qrReply.getRequestUri()
 			);

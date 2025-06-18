@@ -32,8 +32,8 @@ public class ElmoImportJob {
 	private static long currentMaxIndex = -1;
 	private static final boolean FAKE_ELM=true; // TODO: Remove this when real ELM keys are avail
 
-	@Value("${dc4eu.issuer.url}")
-	private String issuerURL;
+	@Value("${dc4eu.verifier.url}")
+	private String verifierURL;
 
 	@Inject
 	ElmoImportRW elmoImportRW;
@@ -134,7 +134,8 @@ public class ElmoImportJob {
 		headers.set("Content-Type", "application/json");
 		HttpEntity<PaginatedVerificationRecordsRequest> entity = new HttpEntity<>(request, headers);
 
-		String url=issuerURL+":444/vp-datastore/verification-records";
+		String url=verifierURL+":444/vp-datastore/verification-records";
+		logger.info("Getting verification records from URL: " + url);
 		ResponseEntity<PaginatedVerificationRecordsReply> responseEntity = restTemplate.exchange(
 				url, HttpMethod.POST, entity, PaginatedVerificationRecordsReply.class);
 

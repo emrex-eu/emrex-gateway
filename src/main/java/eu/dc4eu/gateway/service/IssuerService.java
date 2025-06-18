@@ -87,7 +87,7 @@ public class IssuerService {
 
 	public String upload(String document_id, String person_id, String collect_id, String given_name, String family_name, String birth_date, String elm) {
 
-		logger.warn("Issuer URL: {}", issuerURL);
+		logger.info("Issuer URL: {}", issuerURL);
 
 		Apiv1UploadRequest request = convertToRequest(issuerRequestMock, document_id, person_id, collect_id, given_name, family_name, birth_date, elm);
 
@@ -112,7 +112,7 @@ public class IssuerService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
 
-
+		logger.info("Issuer URL: {}", issuerURL);
 
 		HttpEntity<Apiv1NotificationRequest> entity = new HttpEntity<>(request, headers);
 
